@@ -4,19 +4,14 @@ node_js:
   - '8.11'
 branches:
   only:
-    - master
+  - master
 before_script:
   - yarn global add firebase-tools
   - yarn install
 script:
   - yarn test
-
 after_success:
   - yarn clean && yarn build && firebase deploy --token $FIREBASE_TOKEN
-
 notifications:
   slack:
-    template:
-        - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} by %{author} %{result} in %{duration}"
-        - "Auto-Deployed at dreamteamhackathon.firebaseapp.com"
-    secure: OYcEREY8JkSk0UipwLNQmFQaTbO9/q0sFoR4EWv6vJTHlnUtrLCNnpyvPoWja9bH/s0o7sosefkcXgiqyqPGT4jUh66huOiZcaBx0Ls+moOyx72oKjEDR5bIBeEj3umi/SSA/erdxLZlobkRUa3FS8ugCQi9PT/RSjvBc+AeXmNRlbMVN9we4amqUfFhAfewRjVFn8WLSZJpNC9PyBEB3brJzoGCQdz9P5vcHbQ1qphTqj6rFefcbG42uldW/3KtqYPJ3kRGnS1vNnffbHRKrzw3dr+NwWzy1GLJxzepQWfW+CUVnS0gpGcHc/yn1TP0rHyFFgw08akvYwXwgeqX7+rOnYjYfRETQEpa2RKMcQQslMqbtqu6NARebJbT/SukxFDIl4z+rzlMayEwgkmxrQsWzQxUWEoDwnKnOrkFMuhQwMy9YBIYan9l27F5gQeA3J8kR2hHFn50hk7RUwDf/C4UE+617oqjoVho8ITVAX8YVFSCu/csgUHz6T6BR0UDKByObsJ3P0zs+gNuws9ASZXQ8R7XivA5xvGRnoYHmJ1xi7Vn5kt38P6bgUvB0rKs7ST35YW5lybih8vdmKdqM7hYbgU93y8nRWC1EjJOUTZc2ykkND3RYxJQg8Rtbu/syWnilFnS7DziIZuKQ8Y6upi8T1aR8P4RdfnU5UQ6a9U=
+    secure: omnXS6/JNJUJlZyImSoY9QSbGJZcNUy/sWyyQ0ZT8ZWMVndKmOKMvDH/Ov6C3cHBFvdUm1WMokw7T06jVz9MlWXS3/ibKm6ml//OvhvJRkohOw9GupOYdQFJ/n6AbRfZDLG3W48vdlHcJrlgEiqUdHFakv1flMbGf4sI9JxKzoYxB6edkL/77yT8+7AS8Q1my9GjM0f31NDJYsPHgLD8Vbj6/iYkUdd/3U0LzctnBLSB6Hu+FHjCTWhby3SKSk3C6pIQZHgGrXGq04/Pf4wBCKQAIgkU1PD/PVASx8OcBU6pKI0/Gnq8lDb0MiTkNJMdbODVpAaRpcuKVbmYANflu1OtoTKpuG+KATJMzx7Owl7h/kg92OBQN8kCd80lK0z6OY0gZKUAnHnoXwdktmVl1SW3XlPhbaucuv0kOi4k87YCniA0np2/eDVKaEPXkdFswT6b3TTfBvl2TsCUHWAPUgCaVXTlj1SnP1E/eYMHUkpqUMmM8NPCktOtxxlgZQicwwoss4p3xLEWmwdPyJ/YoTkxxznUjPg9r/XrCZ7rGc1mFGV8xqtdjYzVl525IDmTaHTnDssjwisUYni6Xk12eFjH51Tuate9wu0k5ENJztSf7KnaaZL9IwqwJ/S0LKTO5JS5Oa+aVfvAmtkBuJ2WWunolgvJ2P+i/4jbQyzF0QI=
