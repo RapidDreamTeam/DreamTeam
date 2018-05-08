@@ -6,14 +6,17 @@ branches:
   only:
     - master
 before_script:
-  - npm install -g firebase-tools yarn
+  - yarn global add firebase-tools
   - yarn install
 script:
   - yarn test
 
 after_success:
-  - yarn build && firebase deploy --token $FIREBASE_TOKEN
+  - yarn clean && yarn build && firebase deploy --token $FIREBASE_TOKEN
 
 notifications:
   slack:
+    template:
+        - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} by %{author} %{result} in %{duration}"
+        - "Auto-Deployed at dreamteamhackathon.firebaseapp.com"
     secure: OYcEREY8JkSk0UipwLNQmFQaTbO9/q0sFoR4EWv6vJTHlnUtrLCNnpyvPoWja9bH/s0o7sosefkcXgiqyqPGT4jUh66huOiZcaBx0Ls+moOyx72oKjEDR5bIBeEj3umi/SSA/erdxLZlobkRUa3FS8ugCQi9PT/RSjvBc+AeXmNRlbMVN9we4amqUfFhAfewRjVFn8WLSZJpNC9PyBEB3brJzoGCQdz9P5vcHbQ1qphTqj6rFefcbG42uldW/3KtqYPJ3kRGnS1vNnffbHRKrzw3dr+NwWzy1GLJxzepQWfW+CUVnS0gpGcHc/yn1TP0rHyFFgw08akvYwXwgeqX7+rOnYjYfRETQEpa2RKMcQQslMqbtqu6NARebJbT/SukxFDIl4z+rzlMayEwgkmxrQsWzQxUWEoDwnKnOrkFMuhQwMy9YBIYan9l27F5gQeA3J8kR2hHFn50hk7RUwDf/C4UE+617oqjoVho8ITVAX8YVFSCu/csgUHz6T6BR0UDKByObsJ3P0zs+gNuws9ASZXQ8R7XivA5xvGRnoYHmJ1xi7Vn5kt38P6bgUvB0rKs7ST35YW5lybih8vdmKdqM7hYbgU93y8nRWC1EjJOUTZc2ykkND3RYxJQg8Rtbu/syWnilFnS7DziIZuKQ8Y6upi8T1aR8P4RdfnU5UQ6a9U=
