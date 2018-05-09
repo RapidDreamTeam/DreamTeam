@@ -14,4 +14,7 @@ after_success:
   - yarn clean && yarn build && firebase deploy --token $FIREBASE_TOKEN
 notifications:
   slack:
+    template:
+      - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} by %{author} %{result} in %{duration}"
+      - "Deployed at: dreamteamhackathon.firebaseapp.com"
     secure: omnXS6/JNJUJlZyImSoY9QSbGJZcNUy/sWyyQ0ZT8ZWMVndKmOKMvDH/Ov6C3cHBFvdUm1WMokw7T06jVz9MlWXS3/ibKm6ml//OvhvJRkohOw9GupOYdQFJ/n6AbRfZDLG3W48vdlHcJrlgEiqUdHFakv1flMbGf4sI9JxKzoYxB6edkL/77yT8+7AS8Q1my9GjM0f31NDJYsPHgLD8Vbj6/iYkUdd/3U0LzctnBLSB6Hu+FHjCTWhby3SKSk3C6pIQZHgGrXGq04/Pf4wBCKQAIgkU1PD/PVASx8OcBU6pKI0/Gnq8lDb0MiTkNJMdbODVpAaRpcuKVbmYANflu1OtoTKpuG+KATJMzx7Owl7h/kg92OBQN8kCd80lK0z6OY0gZKUAnHnoXwdktmVl1SW3XlPhbaucuv0kOi4k87YCniA0np2/eDVKaEPXkdFswT6b3TTfBvl2TsCUHWAPUgCaVXTlj1SnP1E/eYMHUkpqUMmM8NPCktOtxxlgZQicwwoss4p3xLEWmwdPyJ/YoTkxxznUjPg9r/XrCZ7rGc1mFGV8xqtdjYzVl525IDmTaHTnDssjwisUYni6Xk12eFjH51Tuate9wu0k5ENJztSf7KnaaZL9IwqwJ/S0LKTO5JS5Oa+aVfvAmtkBuJ2WWunolgvJ2P+i/4jbQyzF0QI=
