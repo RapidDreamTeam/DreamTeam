@@ -7,9 +7,11 @@
     "build": "NODE_ENV=production vue-cli-service build",
     "test": "vue-cli-service test",
     "lint": "vue-cli-service lint",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "precommit": "pretty-quick --staged && yarn test"
   },
   "dependencies": {
+    "firebase": "^5.0.0",
     "register-service-worker": "^1.0.0",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
@@ -24,8 +26,10 @@
     "@vue/eslint-config-prettier": "^3.0.0-beta.9",
     "@vue/test-utils": "^1.0.0-beta.10",
     "chai": "^4.1.2",
+    "husky": "^0.14.3",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
+    "pretty-quick": "^1.4.1",
     "rimraf": "^2.6.2",
     "vue-template-compiler": "^2.5.13"
   },
