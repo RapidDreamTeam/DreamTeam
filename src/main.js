@@ -3,8 +3,12 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import firebase from "./firebase";
+import Vuetify from "vuetify";
 import "./registerServiceWorker";
+import "babel-polyfill";
+import "vuetify/dist/vuetify.min.css";
 
+Vue.use(Vuetify);
 Vue.config.productionTip = false;
 
 // Can reference firebase using Vue.firebase.auth()......
