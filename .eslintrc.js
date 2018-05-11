@@ -4,4 +4,4 @@ module.exports = {
     'plugin:vue/essential',
     '@vue/prettier'
   ]
-}
+};
