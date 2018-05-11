@@ -6,13 +6,13 @@ import firebase from "./firebase";
 import Vuetify from "vuetify";
 import "./registerServiceWorker";
 import "babel-polyfill";
-import "vuetify/dist/vuetify.min.css";
+// import "vuetify/dist/vuetify.min.css";
 
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
 
 // Can reference firebase using Vue.firebase.auth()......
-Vue.firebase = firebase;
+Vue.$firebase = firebase;
 
 new Vue({
   router,
