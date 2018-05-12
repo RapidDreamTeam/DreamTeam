@@ -1,16 +1,17 @@
 <template>
     <v-app id="main">
-        <Toolbar drawer="drawer" v-on:toggle-drawer="setDrawer"/>
+        <Toolbar :drawer="drawer" v-on:toggle-drawer="setDrawer"/>
+        <NavigationDrawer :drawer="drawer" v-model="setDrawer" />
     </v-app>
 </template>
 
 <script>
-import Frame from "@/components/Frame.vue";
 import Toolbar from "@/components/Toolbar.vue";
+import NavigationDrawer from "@/components/NavigationDrawer.vue";
 
 export default {
   components: {
-    Frame,
+    NavigationDrawer,
     Toolbar
   },
   data: () => ({
