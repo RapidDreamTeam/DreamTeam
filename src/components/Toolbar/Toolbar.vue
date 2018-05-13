@@ -71,7 +71,7 @@ export default {
   data: () => ({
     drawer: true,
     items: [
-      { icon: "calendar_today", text: "Today", link: "/" },
+      { icon: "calendar_today", text: "Today", link: "/dashboard" },
       { icon: "calendar_today", text: "Button Two", link: "/abc" },
       { icon: "calendar_today", text: "Button Three", link: "/def" },
       {
