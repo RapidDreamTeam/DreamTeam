@@ -25,18 +25,22 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        items: [
-          { header: 'Today' },
-          { avatar: '/assets/hackathon.jpg', title: 'TOC Task 2'},
-          { divider: true, inset: true },
-          { avatar: '/assets/hackathon.jpg', title: 'Hackathon-2 <span class="grey--text text--lighten-1">4</span>'},
-          { divider: true, inset: true },
-          { avatar: '/assets/hackathon.jpg', title: 'God of War', subtitle: "<span class='text--primary'>Playstation Overload</span> &mdash; You need to finish this, Boy." }
-        ]
-      }
-    }
+export default {
+  data() {
+    return {
+      items: [
+        { header: "Today" },
+        { avatar: "/assets/hackathon.jpg", title: "TOC Task 2" },
+        { divider: true, inset: true },
+        { avatar: "/assets/hackathon.jpg", title: 'Hackathon-2 <span class="grey--text text--lighten-1">4</span>' },
+        { divider: true, inset: true },
+        {
+          avatar: "/assets/hackathon.jpg",
+          title: "God of War",
+          subtitle: "<span class='text--primary'>Playstation Overload</span> &mdash; You need to finish this, Boy."
+        }
+      ]
+    };
   }
+};
 </script>

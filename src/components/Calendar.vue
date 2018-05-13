@@ -3,24 +3,24 @@
 </template>
 
 <script>
-import FullCalender from 'vue-fullcalendar'
+import FullCalender from "vue-fullcalendar";
 export default {
   components: {
     FullCalender
   },
-  data(){
+  data() {
     return {
       calEvents: [
         {
-    title : 'Sunny Out of Office',
-    start : '2018-05-12',
-    end : '2018-05-13'
-  }
+          title: "Sunny Out of Office",
+          start: "2016-08-25",
+          end: "2017-07-27"
+        }
       ]
-    }
+    };
   },
-  methods: {
+  methods: {}
+};
 
-  }
-}
+
 </script>

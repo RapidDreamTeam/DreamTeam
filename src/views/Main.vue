@@ -13,7 +13,6 @@
 </template>
 
 <script>
-
 import Calendar from "@/components/Calendar.vue";
 import List from "@/components/List.vue";
 
@@ -21,7 +20,6 @@ export default {
   components: {
     Calendar,
     List
-
   },
   data: () => ({}),
   methods: {}
