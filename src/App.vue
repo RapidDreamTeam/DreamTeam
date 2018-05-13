@@ -1,9 +1,9 @@
 <template>
-    <v-app>
-      <Toolbar>
-        <Main />
-      </Toolbar>
-    </v-app>
+  <v-app>
+    <Toolbar>
+      <Main />
+    </Toolbar>
+  </v-app>
 </template>
 
 <script>
