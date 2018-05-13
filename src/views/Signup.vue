@@ -11,7 +11,7 @@
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <v-text-field v-model="email" :rules="[rules.required, rules.email]" label="E-mail">
+                  <v-text-field prepend-icon="mail" v-model="email" :rules="[rules.required, rules.email]" label="E-mail" />
                   <v-text-field v-model="password" id="password" prepend-icon="lock" label="Password" type="password" />
                   <v-text-field prepend-icon="lock" label="Firstname" type="text" />
                   <v-text-field prepend-icon="lock" label="Firstname" type="text" />
@@ -34,7 +34,17 @@ import FacebookIcon from "vue-material-design-icons/facebook.vue";
 import GoogleIcon from "vue-material-design-icons/google.vue";
 export default {
   components: { FacebookIcon, GoogleIcon },
-  data: () => ({ email: "", password: "" }),
+  data: () => ({
+    email: "",
+    password: "",
+    rules: {
+      required: value => !!value || "Required.",
+      email: value => {
+        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return pattern.test(value) || "Invalid e-mail.";
+      }
+    }
+  }),
   methods: {}
 };
 </script>
