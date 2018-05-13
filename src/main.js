@@ -7,6 +7,7 @@ import Vuetify from "vuetify";
 import "./registerServiceWorker";
 import "babel-polyfill";
 // import "vuetify/dist/vuetify.min.css";
+import "vue-material-design-icons/styles.css";
 
 Vue.use(Vuetify);
 Vue.config.productionTip = false;

@@ -69,7 +69,7 @@
 import ToolbarButton from "./ToolbarButton.vue";
 export default {
   data: () => ({
-    drawer: true,
+    drawer: null,
     items: [
       { icon: "calendar_today", text: "Today", link: "/dashboard" },
       { icon: "calendar_today", text: "Button Two", link: "/abc" },

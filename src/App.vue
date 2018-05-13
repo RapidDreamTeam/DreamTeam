@@ -1,15 +1,18 @@
 <template>
   <v-app>
-    <Toolbar>
-      <router-view></router-view>
-    </Toolbar>
+    <div v-if="['/', '/signin', '/signup'].includes($route.path)">
+      <router-view />
+    </div>
+    <div v-else>
+      <Toolbar>
+        <router-view />
+      </Toolbar>
+    </div>
   </v-app>
 </template>
 
 <script>
-// Need to vue router
 import Toolbar from "@/components/Toolbar/Toolbar.vue";
-
 export default {
   components: {
     Toolbar

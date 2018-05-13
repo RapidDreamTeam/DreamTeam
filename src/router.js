@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Main from "@/views/Main.vue";
-import Login from "@/views/Login.vue";
+import Signin from "@/views/Signin.vue";
+import Signup from "@/views/Signup.vue";
 import LandingPage from "@/views/LandingPage.vue";
 import PageNotFound from "@/views/PageNotFound.vue";
 Vue.use(Router);
@@ -15,9 +16,14 @@ export default new Router({
       component: Main
     },
     {
-      path: "/login",
-      name: "Login",
-      component: Login
+      path: "/signin",
+      name: "Sign In",
+      component: Signin
+    },
+    {
+      path: "/signup",
+      name: "Sign Up",
+      component: Signup
     },
     {
       path: "/",
