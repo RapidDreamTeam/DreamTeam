@@ -1,5 +1,5 @@
 <template>
-  <div />
+  <div v-text="center">Page Not Found</div>
 </template>
 
 <script>

@@ -1,11 +1,7 @@
 <template>
-  <div>
-      What's Up
-  </div>
+  <div />
 </template>
-
 
 <script>
 export default {};
 </script>
-
