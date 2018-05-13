@@ -26,9 +26,6 @@
                 {{ item.heading }}
               </v-subheader>
             </v-flex>
-            <v-flex xs6 class="text-xs-center">
-              <a href="#!" class="body-2 black--text">EDIT</a>
-            </v-flex>
           </v-layout>
           <v-list-group v-else-if="item.children" v-model="item.model" :key="item.text" :prepend-icon="item.model ? item.icon : item['icon-alt']" append-icon="">
             <v-list-tile slot="activator">
@@ -71,6 +68,7 @@ export default {
   data: () => ({
     drawer: null,
     items: [
+      { heading: "Calendar" },
       { icon: "calendar_today", text: "Today", link: "/dashboard" },
       { icon: "calendar_today", text: "Button Two", link: "/abc" },
       { icon: "calendar_today", text: "Button Three", link: "/def" },
