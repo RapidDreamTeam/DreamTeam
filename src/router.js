@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Main from "@/views/Main.vue";
-import Login from "@/views/Login";
-import LandingPage from "@/views/LandingPage";
+import Login from "@/views/Login.vue";
+import LandingPage from "@/views/LandingPage.vue";
+import PageNotFound from "@/views/PageNotFound.vue";
 Vue.use(Router);
 
 export default new Router({
@@ -22,6 +23,11 @@ export default new Router({
       path: "/",
       name: "Dashboard",
       component: LandingPage
+    },
+    {
+      path: "*",
+      name: "Page not found",
+      component: PageNotFound
     }
   ]
 });
