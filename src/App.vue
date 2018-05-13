@@ -1,12 +1,22 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+    <v-app>
+      <Toolbar>
+        <Main />
+      </Toolbar>
+    </v-app>
 </template>
 
-<style lang="stylus">
-</style>
+<script>
+// Need to vue router
+import Toolbar from "@/components/Toolbar.vue";
+import Main from "@/views/Main.vue";
+
+export default {
+  components: {
+    Toolbar,
+    Main
+  },
+  data: () => ({}),
+  methods: {}
+};
+</script>

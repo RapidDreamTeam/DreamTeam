@@ -10,7 +10,13 @@
       <ToolbarButton icon="person"/>
       <ToolbarButton icon="notifications"/>
     </v-toolbar>
-   <slot />
+    
+    <v-content>
+      <v-container fluid fill-height>
+        <slot />
+      </v-container>
+    </v-content>
+    
     <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app>
       <v-list dense>
       </v-list>
