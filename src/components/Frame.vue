@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <v-app id="inspire">
+
     <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app>
       <v-list dense>
 
@@ -34,7 +35,7 @@
         </v-layout>
       </v-container>
     </v-content>
-  </div>
+  </v-app>
 </template>
 
 <script>

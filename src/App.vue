@@ -8,7 +8,7 @@
 
 <script>
 // Need to vue router
-import Toolbar from "@/components/Toolbar.vue";
+import Toolbar from "@/components/Toolbar/Toolbar.vue";
 import Main from "@/views/Main.vue";
 
 export default {
