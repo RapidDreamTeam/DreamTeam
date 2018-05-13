@@ -1,25 +1,27 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Main from "@/views/Main.vue";
-import What from "@/views/WhatsUp.vue";
-import Hi from "@/views/HiThere.vue";
+import Login from "@/views/Login";
+import LandingPage from "@/views/LandingPage";
 Vue.use(Router);
 
 export default new Router({
   mode: "history",
   routes: [
     {
-      path: "/",
-      name: "Home",
+      path: "/dashboard",
+      name: "Dashboard",
       component: Main
     },
     {
-      path: "/what",
-      component: What
+      path: "/login",
+      name: "Login",
+      component: Login
     },
     {
-      path: "/hi",
-      component: Hi
+      path: "/",
+      name: "Dashboard",
+      component: LandingPage
     }
   ]
 });
