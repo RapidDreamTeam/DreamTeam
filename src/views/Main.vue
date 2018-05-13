@@ -1,26 +1,25 @@
 <template>
-    <v-app id="main">
-        <Toolbar :drawer="drawer" v-on:toggle-drawer="setDrawer"/>
-        <SideNav :drawer="drawer" v-model="setDrawer" />
+    <v-app>
+      <Toolbar>
+        <v-content>
+          <v-container fluid fill-height>
+            <v-layout justify-center align-center>
+              Hi There
+            </v-layout>
+          </v-container>
+        </v-content>
+      </Toolbar>
     </v-app>
 </template>
 
 <script>
 import Toolbar from "@/components/Toolbar.vue";
-import SideNav from "@/components/SideNav.vue";
 
 export default {
   components: {
-    SideNav,
     Toolbar
   },
-  data: () => ({
-    drawer: null
-  }),
-  methods: {
-    setDrawer: () => {
-      this.drawer = !this.drawer;
-    }
-  }
+  data: () => ({}),
+  methods: {}
 };
 </script>
