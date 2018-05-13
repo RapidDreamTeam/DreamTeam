@@ -1,16 +1,14 @@
 <template>
-          <v-container fluid>
-              <v-flex xs4>
-              </v-flex>
-            </v-flex xs8>
-            <Calendar />
-          </v-flex>
-          </v-container>
-                <List />
-
-
-
-
+  <v-container fluid>
+    <v-layout row wrap>
+      <v-flex xs4>
+        <List />
+      </v-flex>
+      <v-flex xs8>
+        <Calendar />
+      </v-flex>
+    </v-layout>
+  </v-container>
 
 </template>
 
