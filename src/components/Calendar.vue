@@ -13,8 +13,8 @@ export default {
       calEvents: [
         {
     title : 'Sunny Out of Office',
-    start : '2016-08-25',
-    end : '2017-07-27'
+    start : '2018-05-12',
+    end : '2018-05-13'
   }
       ]
     }
