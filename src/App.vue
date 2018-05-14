@@ -1,8 +1,9 @@
 <template>
   <v-app>
-    {{ $route }}
-    <div v-if="['/', '/signin', '/signup'].includes($route.path)">
-      <router-view />
+    <div v-if="['/', '/signin', '/register'].includes($route.path)">
+      <!-- <videoBG :sources="['/media/Office-Day/MP4/Office-Day.mp4']" img="/media/Office-Day/SnapShots/Office-Day.jpg"> -->
+        <router-view />
+      <!-- </videoBG> -->
     </div>
     <div v-else>
       <Toolbar>
@@ -14,9 +15,11 @@
 
 <script>
 import Toolbar from "@/components/Toolbar/Toolbar.vue";
+import VideoBG from "vue-videobg";
 export default {
   components: {
-    Toolbar
+    Toolbar,
+    VideoBG
   },
   data: () => ({}),
   methods: {}
