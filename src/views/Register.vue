@@ -6,20 +6,21 @@
           <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
               <v-toolbar dark color="primary">
-                <v-toolbar-title>Sign up</v-toolbar-title>
+                <v-toolbar-title>Register</v-toolbar-title>
                 <v-spacer />
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <v-text-field prepend-icon="mail" v-model="email" :rules="[rules.required, rules.email]" label="E-mail" />
-                  <v-text-field v-model="password" id="password" prepend-icon="lock" label="Password" type="password" />
-                  <v-text-field prepend-icon="lock" label="Firstname" type="text" />
-                  <v-text-field prepend-icon="lock" label="Firstname" type="text" />
+                  <v-text-field v-model="email" prepend-icon="mail" :rules="[rules.required, rules.email]" label="E-mail" />
+                  <v-text-field v-model="password" prepend-icon="lock" label="Password" type="password" />
+                  <v-text-field v-model="repeatpassword" prepend-icon="lock" label="Repeat Password" type="password" />
+                  <v-text-field v-model="firstname" prepend-icon="lock" label="Firstname" type="text" />
+                  <v-text-field v-model="lastname" prepend-icon="lock" label="Firstname" type="text" />
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary">Sign In</v-btn>
+                <v-btn color="primary">Register</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -37,6 +38,9 @@ export default {
   data: () => ({
     email: "",
     password: "",
+    repeatpassword: "",
+    firstname: "",
+    lastname: "",
     rules: {
       required: value => !!value || "Required.",
       email: value => {
@@ -45,6 +49,11 @@ export default {
       }
     }
   }),
-  methods: {}
+  methods: {
+    signup: () => {
+      const { username, password } = this;
+      this.$store.dispatch("signup", { username, password });
+    }
+  }
 };
 </script>

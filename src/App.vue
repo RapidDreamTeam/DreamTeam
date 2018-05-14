@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    {{ $route }}
     <div v-if="['/', '/signin', '/signup'].includes($route.path)">
       <router-view />
     </div>
