@@ -2,10 +2,20 @@ import Vue from "vue";
 import Router from "vue-router";
 import Main from "@/views/Main.vue";
 import Signin from "@/views/Signin.vue";
-import Signup from "@/views/Signup.vue";
+import Register from "@/views/Register.vue";
 import LandingPage from "@/views/LandingPage.vue";
 import PageNotFound from "@/views/PageNotFound.vue";
+import { auth } from "@/firebase.js";
+
 Vue.use(Router);
+
+const AuthGuard = (to, from, next) => {
+  if (auth.currentUser) {
+    next();
+  } else {
+    next("/register");
+  }
+};
 
 export default new Router({
   mode: "history",
@@ -14,6 +24,7 @@ export default new Router({
       path: "/dashboard",
       name: "Dashboard",
       component: Main
+      // beforeEnter: AuthGuard
     },
     {
       path: "/signin",
@@ -21,9 +32,9 @@ export default new Router({
       component: Signin
     },
     {
-      path: "/signup",
-      name: "Sign Up",
-      component: Signup
+      path: "/register",
+      name: "Register",
+      component: Register
     },
     {
       path: "/",

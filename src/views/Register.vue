@@ -20,7 +20,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary">Register</v-btn>
+                <v-btn color="primary" @click.stop="register">Register</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -50,9 +50,9 @@ export default {
     }
   }),
   methods: {
-    signup: () => {
-      const { username, password } = this;
-      this.$store.dispatch("signup", { username, password });
+    register() {
+      const { email: username, password } = this;
+      this.$store.dispatch("register", { username, password }).catch(err => alert(err.message));
     }
   }
 };

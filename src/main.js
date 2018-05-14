@@ -1,4 +1,5 @@
 import Vue from "vue";
+
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -11,13 +12,13 @@ import "vue-material-design-icons/styles.css";
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
 
-// Can reference firebase using Vue.firebase.auth()......
-Vue.firebase = firebase;
-Vue.db = db;
-Vue.auth = auth;
-
 new Vue({
+  el: "#app",
   router,
   store,
-  render: h => h(App)
-}).$mount("#app");
+  firebase,
+  auth,
+  db,
+  render: h => h(App),
+  created: () => {}
+});

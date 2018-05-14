@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import router from "@/router";
+import { auth } from "@/firebase.js";
 
 Vue.use(Vuex);
 
@@ -89,30 +91,33 @@ Vue.use(Vuex);
 //   }
 // });
 
-new Vuex.Store({
+export default new Vuex.Store({
   state: {
     freeHours: {},
     workHours: {},
     lectureHours: {},
-    loading: false
+    loading: false,
+    currentUser: null
   },
   mutations: {
-    setFreeHours: (state, payload) => {
-      state.freeHours = payload;
+    setFreeHours: (state, { freeHours }) => {
+      state.freeHours = freeHours;
     },
-    setWorkHours: (state, payload) => {
-      state.workHours = payload;
+    setWorkHours: (state, { workHours }) => {
+      state.workHours = workHours;
     },
-    setLectureHours: (state, payload) => {
-      state.lectureHours = payload;
+    setLectureHours: (state, { lectureHours }) => {
+      state.lectureHours = lectureHours;
     },
-    setLoading: (state, payload) => {
-      state.loading = payload;
+    setLoading: (state, { loading }) => {
+      state.loading = loading;
+    },
+    setCurrentUser: (state, { currentUser }) => {
+      state.currentUser = currentUser;
     }
   },
   actions: {
     computeFreeHours: ({ commit }, { uid, day }) => {
-      // const { db } = Vue;
       // db
       //   .ref(`${uid}/meta`)
       //   .once("value", ({ val, key }) => ({
@@ -122,7 +127,6 @@ new Vuex.Store({
       //   .then(payload => commit("setFreeHours", payload));
     },
     getWorkHours: ({ commit }, { uid, day }) => {
-      // const { db } = Vue;
       // db
       //   .ref(`${uid}/meta`)
       //   .once("value", ({ val, key }) => ({
@@ -133,6 +137,35 @@ new Vuex.Store({
     },
     getLectureHours: ({ commit }, { uid, day }) => {
       // commit("setLectureHours", null);
+    },
+    emailSignin: ({ commit }, { username, password }) => {
+      return auth()
+        .signInWithEmailAndPassword(username, password)
+        .then(({ currentUser }) => {
+          commit("setCurrentUser", {
+            currentUser
+          });
+        });
+    },
+    register: ({ commit }, { username, password }) => {
+      return auth()
+        .createUserWithEmailAndPassword(username, password)
+        .then(({ user }) => {
+          user.sendEmailVerification();
+
+          return user;
+        })
+        .then(user => {
+          commit("setCurrentUser", {
+            currentUser: user
+          });
+        })
+        .then(() => router.push("/signin"));
+    },
+    signout: ({ commit }) => {
+      auth().signOut();
+      commit("setCurrentUser", null);
+      router.push("/login");
     }
   }
 });
