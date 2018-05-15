@@ -141,6 +141,10 @@ export default new Vuex.Store({
     emailSignin: ({ commit }, { username, password }) => {
       return auth()
         .signInWithEmailAndPassword(username, password)
+        .then(u => {
+          console.log(u);
+          return u;
+        })
         .then(({ user }) => {
           commit("setCurrentUser", {
             currentUser: user
