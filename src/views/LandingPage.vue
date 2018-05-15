@@ -1,8 +1,10 @@
 <template>
   <v-app light>
-    <!-- <v-toolbar class="white">
-      <v-toolbar-title v-text="title"></v-toolbar-title>
-    </v-toolbar> -->
+    <v-toolbar color="blue darken-3" dark app fixed>
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+        <span class="hidden-sm-and-down">Advance Scheduler</span>
+      </v-toolbar-title>
+    </v-toolbar>
     <v-content>
       <section>
         <v-parallax src="/assets/img/hero.jpeg" height="600">
