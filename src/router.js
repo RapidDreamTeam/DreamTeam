@@ -10,7 +10,7 @@ import { auth } from "@/firebase.js";
 Vue.use(Router);
 
 const AuthGuard = (to, from, next) => {
-  if (auth.currentUser) {
+  if (auth().currentUser) {
     next();
   } else {
     next("/register");
