@@ -27,8 +27,7 @@ const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
         store.dispatch("currentUser", firebaseUser);
         router.push("/dashboard");
       } else {
-        store.dispatch("currentUser", null);
-        router.push("/login");
+        store.dispatch("signout", null);
       }
     }
   });

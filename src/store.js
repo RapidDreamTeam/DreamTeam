@@ -164,7 +164,7 @@ export default new Vuex.Store({
         const provider = new firebase.auth.GoogleAuthProvider();
         auth().signInWithPopup(provider);
       } else {
-        auth().signOut();
+        commit("signout");
       }
     },
     register: ({ commit }, { username, password }) => {
