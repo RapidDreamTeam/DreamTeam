@@ -147,6 +147,10 @@ export default new Vuex.Store({
     emailSignin: ({ commit }, { username, password }) => {
       return auth()
         .signInWithEmailAndPassword(username, password)
+        .then(u => {
+          console.log(u);
+          return u;
+        })
         .then(({ user }) => {
           commit("setCurrentUser", {
             currentUser: user
@@ -166,7 +170,7 @@ export default new Vuex.Store({
         const provider = new firebase.auth.GoogleAuthProvider();
         auth().signInWithPopup(provider);
       } else {
-        auth().signOut();
+        commit("signout");
       }
     },
     register: ({ commit }, { username, password }) => {
