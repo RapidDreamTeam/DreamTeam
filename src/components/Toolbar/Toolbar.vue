@@ -7,6 +7,9 @@
       </v-toolbar-title>
       <v-spacer />
       <ToolbarButton icon="person"/>
+      <v-btn class="blue darken-3" dark large @click.stop="signout">
+        Sign out
+      </v-btn>
       <ToolbarButton icon="notifications"/>
     </v-toolbar>
 
@@ -80,7 +83,12 @@ export default {
       }
     ]
   }),
-  methods: {},
+  methods: {
+    signout(){
+      this.$store.dispatch('signout')
+      
+    }
+  },
   watch: {},
   components: {
     ToolbarButton
