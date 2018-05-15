@@ -5,18 +5,17 @@
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <span class="hidden-sm-and-down">Advance Scheduler</span>
       </v-toolbar-title>
-      <v-text-field flat solo-inverted prepend-icon="search" label="Search" class="hidden-sm-and-down" />
       <v-spacer />
       <ToolbarButton icon="person"/>
       <ToolbarButton icon="notifications"/>
     </v-toolbar>
-    
+
     <v-content>
       <v-container fluid fill-height>
         <slot />
       </v-container>
     </v-content>
-    
+
     <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app>
       <v-list dense>
         <template v-for="item in items">
@@ -68,10 +67,10 @@ export default {
   data: () => ({
     drawer: null,
     items: [
-      { heading: "Calendar" },
-      { icon: "calendar_today", text: "Today", link: "/dashboard" },
-      { icon: "calendar_today", text: "Button Two", link: "/abc" },
-      { icon: "calendar_today", text: "Button Three", link: "/def" },
+      { heading: "Scheduler" },
+      { icon: "calendar_today", text: "Class Management", link: "/dashboard" },
+      { icon: "calendar_today", text: "Task Management", link: "/abc" },
+      { icon: "calendar_today", text: "Time Management", link: "/def" },
       {
         icon: "keyboard_arrow_up",
         "icon-alt": "keyboard_arrow_down",
