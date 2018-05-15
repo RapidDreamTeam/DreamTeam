@@ -11,7 +11,7 @@ Vue.use(Vuex);
 // uid/workHours
 // uid/freeHours
 
-// Pan Was here!!
+// Cunt Was here!!
 
 // export default new Vuex.Store({
 //   state: {
@@ -24,7 +24,6 @@ Vue.use(Vuex);
 //     getFreeHours({ commit }, { uid, day }) {
 //       const { db } = Vue;
 //       console.log(db);
-
 //       const userMeta = db
 //         .ref(`${uid}/meta`)
 //         .once("value", snapshot => {
@@ -118,25 +117,32 @@ export default new Vuex.Store({
   },
   actions: {
     computeFreeHours: ({ commit }, { uid, day }) => {
-      // db
-      //   .ref(`${uid}/meta`)
-      //   .once("value", ({ val, key }) => ({
-      //     meta: val(),
-      //     id: key
-      //   }))
-      //   .then(payload => commit("setFreeHours", payload));
+      db()
+        .ref(`${uid}/meta`)
+        .once("value", ({ val, key }) => ({
+          meta: val(),
+          id: key
+        }))
+        .then(({ meta, id }) => commit("setFreeHours", meta.week[day].freeHours));
     },
     getWorkHours: ({ commit }, { uid, day }) => {
-      // db
-      //   .ref(`${uid}/meta`)
-      //   .once("value", ({ val, key }) => ({
-      //     meta: val(),
-      //     id: key
-      //   }))
-      //   .then(meta => commit("setWorkHours", meta.week.day.workHours));
+      db()
+        .ref(`${uid}/meta`)
+        .once("value", ({ val, key }) => ({
+          meta: val(),
+          id: key
+        }))
+        .then(({ meta, id }) => commit("setWorkHours", meta.week[day].workHours));
     },
     getLectureHours: ({ commit }, { uid, day }) => {
       // commit("setLectureHours", null);
+      db()
+      .ref(`${uid}/classes`)
+      .once("value",({ val, key }) => ({
+        meta: val(),
+        id: key
+      }))
+      .then(({ meta, id }) => commit("setLectureHours", meta.week[day].freeHours));
     },
     emailSignin: ({ commit }, { username, password }) => {
       return auth()

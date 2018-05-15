@@ -8,7 +8,9 @@ import Vuetify from "vuetify";
 import "./registerServiceWorker";
 import "babel-polyfill";
 import "vue-material-design-icons/styles.css";
+import FullCalendar from "vue-full-calendar";
 
+Vue.use(FullCalendar);
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
 
