@@ -15,7 +15,7 @@
                   <v-text-field v-model="password" prepend-icon="lock" label="Password" type="password" />
                   <v-text-field v-model="repeatpassword" prepend-icon="lock" label="Repeat Password" type="password" />
                   <v-text-field v-model="firstname" prepend-icon="lock" label="Firstname" type="text" />
-                  <v-text-field v-model="lastname" prepend-icon="lock" label="Firstname" type="text" />
+                  <v-text-field v-model="lastname" prepend-icon="lock" label="Lastname" type="text" />
                 </v-form>
               </v-card-text>
               <v-card-actions>
