@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "@/router";
-import { auth } from "@/firebase.js";
+import firebase, { auth } from "@/firebase.js";
 
 Vue.use(Vuex);
 
@@ -141,11 +141,27 @@ export default new Vuex.Store({
     emailSignin: ({ commit }, { username, password }) => {
       return auth()
         .signInWithEmailAndPassword(username, password)
-        .then(({ currentUser }) => {
+        .then(({ user }) => {
           commit("setCurrentUser", {
-            currentUser
+            currentUser: user
           });
         });
+    },
+    facebookSignin: ({ commit }) => {
+      if (!auth().currentUser) {
+        const provider = new firebase.auth.FacebookAuthProvider();
+        auth().signInWithPopup(provider);
+      } else {
+        auth().signOut();
+      }
+    },
+    googleSignin: ({ commit }) => {
+      if (!auth().currentUser) {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth().signInWithPopup(provider);
+      } else {
+        auth().signOut();
+      }
     },
     register: ({ commit }, { username, password }) => {
       return auth()
@@ -166,6 +182,12 @@ export default new Vuex.Store({
       auth().signOut();
       commit("setCurrentUser", null);
       router.push("/login");
-    }
-  }
+    },
+    currentUser: ({ commit }, firebaseUser) => {
+      commit("setCurrentUser", firebase);
+    },
+    resetPassword: ({ commit }) => {},
+    changePassword: ({ commit }, { password }) => {}
+  },
+  getters: {}
 });

@@ -12,13 +12,23 @@ import "vue-material-design-icons/styles.css";
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
 
-new Vue({
-  el: "#app",
-  router,
-  store,
-  firebase,
-  auth,
-  db,
-  render: h => h(App),
-  created: () => {}
+const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
+  new Vue({
+    el: "#app",
+    router,
+    store,
+    firebase,
+    auth,
+    db,
+    render: h => h(App),
+    created() {
+      console.log(firebaseUser);
+      if (firebaseUser) {
+        store.dispatch("currentUser", firebaseUser);
+      } else {
+        store.dispatch("currentUser", null);
+      }
+    }
+  });
+  unsubscribe();
 });
