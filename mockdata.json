@@ -1,0 +1,66 @@
+{
+  "zQVOqEN0k5hSrxHpwwLWmFn097K2": {
+    "classes": [{
+      "name": "OOC",
+      "room": 1409,
+      "classId": 1,
+      "startTime": "10:00",
+      "endTime": "11:50",
+      "days": ["monday", "webnesday"]
+    }],
+    "meta": {
+      "alertBefore": 15,
+      "week": {
+        "monday": {
+          "freeHours": [{
+            "startTime": "10:00",
+            "endTime": "11:50"
+          }, {
+            "startTime": "18:00",
+            "endTime": "20:50"
+          }],
+          "workHours": [{
+            "startTime": "8:00",
+            "endTime": "10:00"
+          }, {
+            "startTime": "12:00",
+            "endTime": "16:50"
+          }],
+          "classHours": [{}],
+          "assignmentHours": [{}]
+        },
+        "tuesday": {
+          "freeHours": [{
+            "startTime": "12:00",
+            "endTime": "13:50"
+          }, {
+            "startTime": "17:00",
+            "endTime": "18:50"
+          }]
+        }
+      }
+    },
+    "tasks": [{
+      "name": "TOC",
+      "dueDate": "2018-05-19",
+      "auto": true,
+      "estimatedTime": 0,
+      "done": false,
+      "subtask": [{
+          "name": "Regex",
+          "estimatedTime": 2,
+          "done": false,
+          "date": "",
+          "time": ""
+        },
+        {
+          "name": "Regex2",
+          "estimatedTime": 3,
+          "done": true,
+          "date": "",
+          "time": ""
+        }
+      ]
+    }]
+  }
+}
