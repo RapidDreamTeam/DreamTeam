@@ -238,8 +238,9 @@ export default new Vuex.Store({
           })
           // .then(item => item.map({ day, estimatedTime } => ({ day, estimatedTime })))
           .then((items) => commit("setTasks", {"tasks": [...tasks, ...items]}))
-          // .then(items => commit())
-        // .then(({ meta, id }) => commit("setWorkHours", meta.week[day].workHours));
+    },
+    getEvents: ({ commit, {uid}) => {
+      
     }
   },
   getters: {}
