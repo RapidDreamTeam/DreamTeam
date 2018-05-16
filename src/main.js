@@ -56,7 +56,7 @@ const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
     registerServiceWorker: function() {
       // checks service worker support
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js', {
+        navigator.serviceWorker.register('/service-worker.js', {
             scope: '/'
           })
           .then(function(reg) {
