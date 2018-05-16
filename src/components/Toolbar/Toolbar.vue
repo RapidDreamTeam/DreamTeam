@@ -63,9 +63,11 @@
 
 <script>
 import ToolbarButton from "./ToolbarButton.vue";
+import AddTaskModal from "../AddTaskModal";
 export default {
   data: () => ({
-    drawer: null,
+    drawer: true,
+    dialog: false,
     items: [
       { heading: "Scheduler" },
       { icon: "calendar_today", text: "Class Management", link: "/dashboard" },

@@ -1,6 +1,6 @@
 <template>
     <v-btn icon>
-        <v-icon>{{ icon }}</v-icon>
+        <v-icon :click="$emit('click', null)">{{ icon }}</v-icon>
     </v-btn>
 </template>
 
