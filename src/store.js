@@ -5,6 +5,16 @@ import firebase, { auth, db } from "@/firebase.js";
 
 Vue.use(Vuex);
 
+const days = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday"
+];
+
 // { workHours: 10-12, freeHours: 2-4, lectureHours: 12-2}
 
 // uid/lectureHours
@@ -101,27 +111,27 @@ export default new Vuex.Store({
     tasks: {}
   },
   mutations: {
-    setFreeHours: (state, { freeHours }) => {
+    setFreeHours(state, { freeHours }) {
       state.freeHours = freeHours;
     },
-    setWorkHours: (state, { workHours }) => {
+    setWorkHours(state, { workHours }) {
       state.workHours = workHours;
     },
-    setLectureHours: (state, { lectureHours }) => {
+    setLectureHours(state, { lectureHours }) {
       state.lectureHours = lectureHours;
     },
-    setLoading: (state, { loading }) => {
+    setLoading(state, { loading }) {
       state.loading = loading;
     },
-    setCurrentUser: (state, { currentUser }) => {
+    setCurrentUser(state, { currentUser }) {
       state.currentUser = currentUser;
     },
-    setTasks: (state, { tasks }) => {
+    setTasks(state, { tasks }) {
       state.tasks = tasks;
     }
   },
   actions: {
-    computeFreeHours: ({ commit }, { uid, day }) => {
+    getFreeHours({ commit }, { uid, day }) {
       db()
         .ref(`${uid}/meta`)
         .once("value", ({ val, key }) => ({
@@ -131,8 +141,10 @@ export default new Vuex.Store({
         .then(({ meta, id }) =>
           commit("setFreeHours", meta.week[day].freeHours)
         );
+
+      // TODO: merge prev state with new state and separate into days
     },
-    getWorkHours: ({ commit }, { uid, day }) => {
+    getWorkHours({ commit }, { uid, day }) {
       db()
         .ref(`${uid}/meta`)
         .once("value", ({ val, key }) => ({
@@ -143,7 +155,7 @@ export default new Vuex.Store({
           commit("setWorkHours", meta.week[day].workHours)
         );
     },
-    getLectureHours: ({ commit }, { uid, day }) => {
+    getLectureHours({ commit }, { uid, day }) {
       db()
         .ref(`${uid}/classes`)
         .once("value", ({ val, key }) => ({
@@ -154,7 +166,7 @@ export default new Vuex.Store({
           commit("setLectureHours", meta.week[day].freeHours)
         );
     },
-    emailSignin: ({ commit }, { username, password }) => {
+    emailSignin({ commit }, { username, password }) {
       return auth()
         .signInWithEmailAndPassword(username, password)
         .then(user => {
@@ -164,7 +176,7 @@ export default new Vuex.Store({
         })
         .then(() => router.push("/dashboard"));
     },
-    facebookSignin: ({ commit }) => {
+    facebookSignin({ commit }) {
       if (!auth().currentUser) {
         const provider = new firebase.auth.FacebookAuthProvider();
         return auth()
@@ -174,7 +186,7 @@ export default new Vuex.Store({
         commit("signout");
       }
     },
-    googleSignin: ({ commit }) => {
+    googleSignin({ commit }) {
       if (!auth().currentUser) {
         const provider = new firebase.auth.GoogleAuthProvider();
         auth()
@@ -184,7 +196,7 @@ export default new Vuex.Store({
         commit("signout");
       }
     },
-    register: ({ commit }, { username, password }) => {
+    register({ commit }, { username, password }) {
       return auth()
         .createUserWithEmailAndPassword(username, password)
         .then(({ user }) => {
@@ -198,7 +210,7 @@ export default new Vuex.Store({
         )
         .then(() => router.push("/signin"));
     },
-    signout: ({ commit }) => {
+    signout({ commit }) {
       auth()
         .signOut()
         .then(() =>
@@ -208,17 +220,17 @@ export default new Vuex.Store({
         )
         .then(() => router.push("/signin"));
     },
-    currentUser: ({ commit }, firebaseUser) => {
+    currentUser({ commit }, firebaseUser) {
       commit("setCurrentUser", {
         currentUser: firebaseUser
       });
     },
-    resetPassword: ({ commit }, { username }) => {
+    resetPassword({ commit }, { username }) {
       return auth()
         .sendPasswordResetEmail(username)
         .then(() => router.push("/login"));
     },
-    changePassword: ( { commit }, { username, currentPassword, newPassword }) => {
+    changePassword({ commit }, { username, currentPassword, newPassword }) {
       const credential = firebase.auth.EmailAuthProvider.credential(
         username,
         currentPassword
@@ -229,18 +241,50 @@ export default new Vuex.Store({
         .reauthenticateWithCredential(credential)
         .then(() => currentUser.updatePassword(newPassword));
     },
-    getScheduledTasksforTheDay: ({ commit, state: {tasks} }, {uid, day}) => {
+    getScheduledTasksforTheDay(
+      {
+        commit,
+        state: { tasks }
+      },
+      { uid, day }
+    ) {
       db()
         .ref(`${uid}/tasks`)
         .once("value", snapshot => {
-            const d = day.toLowerCase().trim();
-            return snapshot.filter(item => d === item.day.toLowerCase().trim())
+          const d = day.toLowerCase().trim();
+          return snapshot.filter(item => d === item.day.toLowerCase().trim());
+        })
+        // .then(item => item.map({ day, estimatedTime } => ({ day, estimatedTime })))
+        .then(items =>
+          commit("setTasks", {
+            tasks: [...tasks, ...items]
           })
-          // .then(item => item.map({ day, estimatedTime } => ({ day, estimatedTime })))
-          .then((items) => commit("setTasks", {"tasks": [...tasks, ...items]}))
+        );
     },
-    getEvents: ({ commit, {uid}) => {
-      
+    getEvents({ commit, dispatch }, { uid }) {
+      const freeHoursPromise = days.map(d =>
+        dispatch("getFreeHours", {
+          uid,
+          day: d
+        })
+      );
+      const workHoursPromise = days.map(d =>
+        dispatch("getWorkHours", {
+          uid,
+          days: d
+        })
+      );
+
+      const lectureHoursPromise = days.map(d =>
+        dispatch("getWorkHours", {
+          uid,
+          day: d
+        })
+      );
+
+      Promise.all(freeHoursPromise).then(() => {});
+      Promise.all(workHoursPromise).then(() => {});
+      Promise.all(lectureHoursPromise).then(() => {});
     }
   },
   getters: {}
