@@ -123,7 +123,9 @@ export default new Vuex.Store({
           meta: val(),
           id: key
         }))
-        .then(({ meta, id }) => commit("setFreeHours", meta.week[day].freeHours));
+        .then(({ meta, id }) =>
+          commit("setFreeHours", meta.week[day].freeHours)
+        );
     },
     getWorkHours: ({ commit }, { uid, day }) => {
       db()
@@ -132,17 +134,21 @@ export default new Vuex.Store({
           meta: val(),
           id: key
         }))
-        .then(({ meta, id }) => commit("setWorkHours", meta.week[day].workHours));
+        .then(({ meta, id }) =>
+          commit("setWorkHours", meta.week[day].workHours)
+        );
     },
     getLectureHours: ({ commit }, { uid, day }) => {
       // commit("setLectureHours", null);
       db()
-      .ref(`${uid}/classes`)
-      .once("value",({ val, key }) => ({
-        meta: val(),
-        id: key
-      }))
-      .then(({ meta, id }) => commit("setLectureHours", meta.week[day].freeHours));
+        .ref(`${uid}/classes`)
+        .once("value", ({ val, key }) => ({
+          meta: val(),
+          id: key
+        }))
+        .then(({ meta, id }) =>
+          commit("setLectureHours", meta.week[day].freeHours)
+        );
     },
     emailSignin: ({ commit }, { username, password }) => {
       return auth()
@@ -189,17 +195,16 @@ export default new Vuex.Store({
         .then(() => router.push("/signin"));
     },
     signout: ({ commit }) => {
-      //  this.$store.dispatch('signout')
       auth().signOut();
       commit("setCurrentUser", null);
       router.push("/login");
     },
     currentUser: ({ commit }, firebaseUser) => {
-      commit("setCurrentUser", firebase);
+      commit("setCurrentUser", firebaseUser);
     },
     resetPassword: ({ commit }, { username }) => {
       return auth()
-        .sendPasswordResetEmail(user)
+        .sendPasswordResetEmail(username)
         .then(() => router.push("/login"));
     },
     changePassword: (
