@@ -26,8 +26,9 @@ const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
     created() {
       console.log(firebaseUser);
       if (firebaseUser) {
-        store.dispatch("currentUser", firebaseUser);
-        router.push("/dashboard");
+        store
+          .dispatch("currentUser", firebaseUser)
+          .then(() => router.push("/dashboard"));
       } else {
         store.dispatch("signout", null);
       }

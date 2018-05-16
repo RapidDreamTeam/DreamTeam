@@ -71,7 +71,8 @@ export default {
     drawer: null,
     items: [
       { heading: "Scheduler" },
-      { icon: "calendar_today", text: "Class Management", link: "/dashboard" },
+      { icon: "calendar_today", text: "Dashboard", link: "/dashboard" },
+      { icon: "calendar_today", text: "Class Management", link: "/something" },
       { icon: "calendar_today", text: "Task Management", link: "/abc" },
       { icon: "calendar_today", text: "Time Management", link: "/def" },
       {
@@ -84,9 +85,8 @@ export default {
     ]
   }),
   methods: {
-    signout(){
-      this.$store.dispatch('signout')
-      
+    signout() {
+      this.$store.dispatch("signout");
     }
   },
   watch: {},

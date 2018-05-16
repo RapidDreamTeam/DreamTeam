@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "@/router";
-import firebase, { auth } from "@/firebase.js";
+import firebase, { auth, db } from "@/firebase.js";
 
 Vue.use(Vuex);
 
@@ -128,7 +128,9 @@ export default new Vuex.Store({
           meta: val(),
           id: key
         }))
-        .then(({ meta, id }) => commit("setFreeHours", meta.week[day].freeHours));
+        .then(({ meta, id }) =>
+          commit("setFreeHours", meta.week[day].freeHours)
+        );
     },
     getWorkHours: ({ commit }, { uid, day }) => {
       db()
@@ -137,41 +139,37 @@ export default new Vuex.Store({
           meta: val(),
           id: key
         }))
-        .then(({ meta, id }) => commit("setWorkHours", meta.week[day].workHours));
+        .then(({ meta, id }) =>
+          commit("setWorkHours", meta.week[day].workHours)
+        );
     },
     getLectureHours: ({ commit }, { uid, day }) => {
-      // commit("setLectureHours", null);
       db()
-      .ref(`${uid}/classes`)
-      .once("value",({ val, key }) => ({
-        meta: val(),
-        id: key
-      }))
-      .then(({ meta, id }) => commit("setLectureHours", meta.week[day].freeHours));
+        .ref(`${uid}/classes`)
+        .once("value", ({ val, key }) => ({
+          meta: val(),
+          id: key
+        }))
+        .then(({ meta, id }) =>
+          commit("setLectureHours", meta.week[day].freeHours)
+        );
     },
     emailSignin: ({ commit }, { username, password }) => {
       return auth()
         .signInWithEmailAndPassword(username, password)
-        .then(u => {
-          console.log(u);
-          return u;
-        })
-        .then(({ user }) => {
+        .then(user => {
           commit("setCurrentUser", {
             currentUser: user
           });
-        }).then(() => router.push("/dashboard"));
+        })
+        .then(() => router.push("/dashboard"));
     },
-    facebookSignin: ({commit}) => {
+    facebookSignin: ({ commit }) => {
       if (!auth().currentUser) {
         const provider = new firebase.auth.FacebookAuthProvider();
-        auth().signInWithPopup(provider)
-        .then((user) => {
-          commit("setCurrentUser", {
-            currentUser: user
-          });
-        })
-        .then(() => router.push("/dashboard"))
+        return auth()
+          .signInWithPopup(provider)
+          .then(() => router.push("/dashboard"));
       } else {
         commit("signout");
       }
@@ -179,12 +177,9 @@ export default new Vuex.Store({
     googleSignin: ({ commit }) => {
       if (!auth().currentUser) {
         const provider = new firebase.auth.GoogleAuthProvider();
-        auth().signInWithPopup(provider)
-        .then((user) => {
-          commit("setCurrentUser", {
-            currentUser: user
-          });
-        }).then(() => router.push("/dashboard"))
+        auth()
+          .signInWithPopup(provider)
+          .then(() => router.push("/dashboard"));
       } else {
         commit("signout");
       }
@@ -194,27 +189,33 @@ export default new Vuex.Store({
         .createUserWithEmailAndPassword(username, password)
         .then(({ user }) => {
           user.sendEmailVerification();
-
           return user;
         })
-        .then(user => {
+        .then(user =>
           commit("setCurrentUser", {
             currentUser: user
-          });
-        })
+          })
+        )
         .then(() => router.push("/signin"));
     },
     signout: ({ commit }) => {
-      auth().signOut();
-      commit("setCurrentUser", null);
-      router.push("/login");
+      auth()
+        .signOut()
+        .then(() =>
+          commit("setCurrentUser", {
+            currentUser: null
+          })
+        )
+        .then(() => router.push("/signin"));
     },
     currentUser: ({ commit }, firebaseUser) => {
-      commit("setCurrentUser", firebase);
+      commit("setCurrentUser", {
+        currentUser: firebaseUser
+      });
     },
     resetPassword: ({ commit }, { username }) => {
       return auth()
-        .sendPasswordResetEmail(user)
+        .sendPasswordResetEmail(username)
         .then(() => router.push("/login"));
     },
     changePassword: ( { commit }, { username, currentPassword, newPassword }) => {
