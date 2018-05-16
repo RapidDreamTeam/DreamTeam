@@ -151,11 +151,11 @@ export default new Vuex.Store({
           console.log(u);
           return u;
         })
-        .then((user) => {
+        .then(({ user }) => {
           commit("setCurrentUser", {
             currentUser: user
           });
-        });
+        }).then(() => router.push("/dashboard"));
     },
     facebookSignin: ({commit}) => {
       if (!auth().currentUser) {
@@ -168,7 +168,7 @@ export default new Vuex.Store({
         })
         .then(() => router.push("/dashboard"))
       } else {
-        auth().signOut();
+        commit("signout");
       }
     },
     googleSignin: ({ commit }) => {
@@ -200,6 +200,7 @@ export default new Vuex.Store({
         .then(() => router.push("/signin"));
     },
     signout: ({ commit }) => {
+      //  this.$store.dispatch('signout')
       auth().signOut();
       commit("setCurrentUser", null);
       router.push("/login");
@@ -207,8 +208,25 @@ export default new Vuex.Store({
     currentUser: ({ commit }, firebaseUser) => {
       commit("setCurrentUser", firebase);
     },
-    resetPassword: ({ commit }) => {},
-    changePassword: ({ commit }, { password }) => {}
+    resetPassword: ({ commit }, { username }) => {
+      return auth()
+        .sendPasswordResetEmail(user)
+        .then(() => router.push("/login"));
+    },
+    changePassword: (
+      { commit },
+      { username, currentPassword, newPassword }
+    ) => {
+      const credential = firebase.auth.EmailAuthProvider.credential(
+        username,
+        currentPassword
+      );
+
+      const { currentUser } = auth();
+      return currentUser
+        .reauthenticateWithCredential(credential)
+        .then(() => currentUser.updatePassword(newPassword));
+    }
   },
   getters: {}
 });
