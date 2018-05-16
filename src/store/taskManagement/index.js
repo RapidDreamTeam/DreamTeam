@@ -9,13 +9,26 @@ const days = [
 ];
 
 import { db } from "@/firebase.js";
+import moment from "moment";
 export const taskManagement = {
   state: {
     freeHours: {},
     workHours: {},
     lectureHours: {},
     events: [],
-    tasks: {}
+    tasks: [],
+    tasksByDueDate: []
+  },
+  computed: {
+    sortedArray: function() {
+      function compare(a, b) {
+        if (a.dueDate < b.dueDate) return -1;
+        if (a.dueDate > b.dueDate) return 1;
+        return 0;
+      }
+
+      return this.arrays.sort(compare);
+    }
   },
   mutations: {
     setFreeHours(state, { freeHours }) {
@@ -29,6 +42,9 @@ export const taskManagement = {
     },
     setTasks(state, { tasks }) {
       state.tasks = tasks;
+    },
+    setTasksByDueDate(state, { tasksByDueDate }) {
+      state.tasksByDueDate = tasksByDueDate;
     }
   },
   actions: {
@@ -107,7 +123,7 @@ export const taskManagement = {
           })
         );
     },
-    getEvents({ commit, dispatch }, { uid }) {
+    getEvents({ dispatch }, { uid }) {
       // const freeHoursPromise = days.map(d =>
       //   dispatch("getFreeHours", {
       //     uid,
@@ -140,6 +156,22 @@ export const taskManagement = {
           uid
         })
       ]).then(() => {});
+    },
+    getTaskByEarliestDueDate({ commit, state }, { uid }) {
+      db()
+        .ref(`${uid}/tasks`)
+        .once("value", snapshot => {
+          const ls = snapshot
+            .filter(each => {
+              each.done === false;
+              return this.sortedArray(ls);
+            })
+            .then(items =>
+              commit("setTasksByDueDate", {
+                tasksByDueDate: [...state.tasksByDueDate, ...items]
+              })
+            );
+        });
     }
   }
 };
