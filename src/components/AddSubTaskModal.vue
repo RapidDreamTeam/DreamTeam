@@ -84,7 +84,7 @@
         set (value) {
           if (!value) {
             if (this.doTime !== null && this.doDate !== null) {
-              this.$emit('close', {"time": this.doTime})
+              this.$emit('close', null)
             }
           }
         }
@@ -106,14 +106,14 @@
     methods: {
       closeSubTask() {
         console.log("cancel");
-        this.$emit('close', {});
+        this.$emit('close', null);
       },
       submitSubTask() {
         console.log(this.doDate, this.doTime);
-        if (auto) {
-          this.$emit('close', {"time": this.doTime, 'date': this.doDate});
+        if (!this.auto) {
+          this.$emit('close', {"name": this.subTaskName, "time": this.doTime, 'date': this.doDate});
         } else {
-          this.$emit('close', {});
+          this.$emit('close', {"name": this.subTaskName});
         }
       }
     }

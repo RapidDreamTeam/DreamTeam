@@ -12,6 +12,15 @@
           <v-flex xs12 sm4 md4>
             <v-checkbox v-model="checkbox" label="Auto"/>
           </v-flex>
+          <v-flex>
+            <v-list>
+              <v-list-tile v-for="(subTask, index) in subTasks" :key="index">
+                <v-list-tile-content>
+                  <v-list-tile-title v-text="subTask.name"></v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+          </v-flex>
           <v-btn @click.native.stop="subTaskDialog=!subTaskDialog" icon>
             <v-icon>{{ "add" }}</v-icon>
           </v-btn>
@@ -85,9 +94,11 @@ export default {
   methods: {
     closeSubTaskDialog (a) {
       this.subTaskDialog = false;
-      this.subTasks = this.subTasks.concat([a]);
-      console.log(a);
-      console.log(this.subTasks)
+      if (a !== null) {
+        this.subTasks = this.subTasks.concat([a]);
+        console.log(a);
+        console.log(this.subTasks)
+      }
     },
   }
 };
