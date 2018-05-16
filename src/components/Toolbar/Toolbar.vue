@@ -37,7 +37,7 @@
                 </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile v-for="(child, i) in item.children" :key="i" @click="">
+            <v-list-tile v-for="(child, i) in item.children" :key="i" @click.stop="goToLink(child.link)">
               <v-list-tile-action v-if="child.icon">
                 <v-icon>{{ child.icon }}</v-icon>
               </v-list-tile-action>
@@ -48,7 +48,7 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
-          <v-list-tile v-else :key="item.text" @click="">
+          <v-list-tile v-else :key="item.text" @click.stop="goToLink(item.link)">
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -75,18 +75,23 @@ export default {
       { icon: "calendar_today", text: "Class Management", link: "/something" },
       { icon: "calendar_today", text: "Task Management", link: "/abc" },
       { icon: "calendar_today", text: "Time Management", link: "/def" },
+      { icon: "calendar_today", text: "Notifications", link: "/notification" },
       {
         icon: "keyboard_arrow_up",
         "icon-alt": "keyboard_arrow_down",
         text: "Labels",
         model: true,
-        children: [{ icon: "add", text: "Create label" }]
+        children: [{ icon: "add", text: "Create label", link: "/aaa" }]
       }
     ]
   }),
   methods: {
     signout() {
       this.$store.dispatch("signout");
+    },
+    goToLink(link) {
+      console.log(link)
+      this.$router.push(link)
     }
   },
   watch: {},
