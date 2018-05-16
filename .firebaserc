@@ -1,5 +1,6 @@
 {
   "projects": {
-    "hackathon2": "dreamteamhackathon"
+    "hackathon2": "dreamteamhackathon",
+    "default": "dreamteamhackathon"
   }
 }
