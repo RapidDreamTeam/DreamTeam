@@ -6,9 +6,9 @@ export const authentication = {
     currentUser: null
   },
   mutations: {
-   setCurrentUser(state, { currentUser }) {
-     state.currentUser = currentUser;
-   },
+    setCurrentUser(state, { currentUser }) {
+      state.currentUser = currentUser;
+    }
   },
   actions: {
     emailSignin({ commit }, { username, password }) {

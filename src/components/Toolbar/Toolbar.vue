@@ -106,36 +106,24 @@ import ToolbarButton from "./ToolbarButton.vue";
 import AddTaskModal from "../AddTaskModal.vue";
 // import AddSubTaskDialog from "../AddSubTaskModal.vue"
 export default {
-  data(){
-    return ({
-    drawer: true,
-    dialog: false,
-    addSubTaskDialog: false,
-    addTaskDialog: false,
-    items: [
-      { heading: "Scheduler" },
-      { icon: "calendar_today", text: "Dashboard", link: "/dashboard" },
-      { icon: "calendar_today", text: "Task Management", link: "/abc" },
-    ]
-  })
-},
-  methods: {},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  data() {
+    return {
+      drawer: true,
+      dialog: false,
+      addSubTaskDialog: false,
+      addTaskDialog: false,
+      items: [
+        { heading: "Scheduler" },
+        { icon: "calendar_today", text: "Dashboard", link: "/dashboard" },
+        { icon: "calendar_today", text: "Task Management", link: "/abc" }
+      ]
+    };
+  },
+  methods: {
+    signout() {
+      this.$store.dispatch("signout");
+    }
+  },
 
   watch: {},
   components: {
