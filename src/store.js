@@ -196,11 +196,17 @@ export default new Vuex.Store({
     signout: ({ commit }) => {
       auth()
         .signOut()
-        .then(() => commit("setCurrentUser", null))
-        .then(() => router.push("/login"));
+        .then(() =>
+          commit("setCurrentUser", {
+            currentUser: null
+          })
+        )
+        .then(() => router.push("/signin"));
     },
     currentUser: ({ commit }, firebaseUser) => {
-      commit("setCurrentUser", firebaseUser);
+      commit("setCurrentUser", {
+        currentUser: firebaseUser
+      });
     },
     resetPassword: ({ commit }, { username }) => {
       return auth()
