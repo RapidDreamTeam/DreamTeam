@@ -10,7 +10,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <!-- <v-btn
+    <v-btn
       fab
       bottom
       right
@@ -21,13 +21,13 @@
     >
       <v-icon>add</v-icon>
     </v-btn>
-    <v-btn @click.native.stop="dialog=!dialog" icon>
+    <!-- <v-btn @click.native.stop="dialog=!dialog" icon>
       <v-icon>{{ "add" }}</v-icon>
-    </v-btn>
+    </v-btn> -->
     <v-dialog v-model="dialog" max-width="500px">
       <AddTaskModal @close="dialog=false" />
-    </v-dialog> -->
-    <v-btn
+    </v-dialog>
+    <!-- <v-btn
       fab
       bottom
       right
@@ -37,11 +37,11 @@
       @click.stop="dialogClass = !dialogClass"
     >
     <v-icon>add</v-icon>
-    </v-btn>
-    <v-btn @click.native.stop="dialogClass=!dialogClass" icon>
+    </v-btn> -->
+    <!-- <v-btn @click.native.stop="dialogClass=!dialogClass" icon>
       <v-icon>{{ "add" }}</v-icon>
-    </v-btn>
-    <v-dialog v-model="this.addClassDialog" max-width="500px">
+    </v-btn> -->
+    <v-dialog v-model="addClassDialog" max-width="500px">
       <AddClassModal @close="$store.dispatch('setClassModal', {'modal': false})" />
     </v-dialog>
   </v-app>
@@ -52,7 +52,7 @@ import Calendar from "@/components/Calendar.vue";
 import List from "@/components/List.vue";
 import AddTaskModal from "@/components/AddTaskModal";
 import AddClassModal from "@/components/AddClassModal";
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
   props: ["dialogClass"],
@@ -64,15 +64,15 @@ export default {
   },
   data: () => ({
     dialog: false,
-    addTaskDialog: false,
-    // addClassDialog: true
+    addTaskDialog: false
+    // addClassDialog: false
   }),
   methods: {
     dialogClose() {
-      this.dialog = false
+      this.dialog = false;
     },
     dialogClassClose() {
-      this.dialogClass = false
+      this.dialogClass = false;
     }
   },
   computed: {
