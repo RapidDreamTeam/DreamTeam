@@ -52,7 +52,7 @@ export default {
   methods: {
     register() {
       const { email: username, password } = this;
-      this.$store.re .dispatch("register", { username, password }).catch(err => alert(err.message));
+      this.$store.dispatch("register", { username, password }).catch(err => alert(err.message));
     }
   }
 };

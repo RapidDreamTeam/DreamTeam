@@ -5,6 +5,7 @@ import Signin from "@/views/Signin.vue";
 import Register from "@/views/Register.vue";
 import LandingPage from "@/views/LandingPage.vue";
 import PageNotFound from "@/views/PageNotFound.vue";
+import Notification from "@/views/Notification.vue";
 import { auth } from "@/firebase.js";
 
 Vue.use(Router);
@@ -45,6 +46,11 @@ export default new Router({
       path: "*",
       name: "Page not found",
       component: PageNotFound
+    },
+    {
+      path: "/notification",
+      name: "Sign up for Notifications",
+      component: Notification
     }
   ]
 });

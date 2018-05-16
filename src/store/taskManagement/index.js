@@ -1,12 +1,38 @@
-import { db } from "@/firebase.js";
+const days = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday"
+];
 
+import { db } from "@/firebase.js";
+import moment from "moment";
 export const taskManagement = {
   state: {
     freeHours: {},
     workHours: {},
     lectureHours: {},
     events: [],
-    tasks: {}
+    tasks: [],
+    tasksByDueDate: [],
+    classModal: false
+  },
+  getters:{
+    getClassDialog: state => state.classModal
+  },
+  computed: {
+    sortedArray: function() {
+      function compare(a, b) {
+        if (a.dueDate < b.dueDate) return -1;
+        if (a.dueDate > b.dueDate) return 1;
+        return 0;
+      }
+
+      return this.arrays.sort(compare);
+    }
   },
   mutations: {
     setFreeHours(state, { freeHours }) {
@@ -20,51 +46,81 @@ export const taskManagement = {
     },
     setTasks(state, { tasks }) {
       state.tasks = tasks;
+    },
+    setTasksByDueDate(state, { tasksByDueDate }) {
+      state.tasksByDueDate = tasksByDueDate;
+    },
+    setClassModal(state, {modal}) {
+      state.classModal = modal
     }
   },
   actions: {
-    getFreeHours({ commit }, { uid, day }) {
+    setClassModal({commit}, {modal}) {
+      console.log("classModal", modal)
+      commit("setClassModal", {modal})
+    },
+    getFreeHours({ commit }, { uid }) {
       db()
         .ref(`${uid}/meta`)
         .once("value", ({ val, key }) => ({
           meta: val(),
           id: key
         }))
-        .then(({ meta, id }) =>
-          commit("setFreeHours", meta.week[day].freeHours)
+        .then(({ meta }) => {
+          // const f = days.map(d => meta.week[d].freeHours); // Filter out and left with free hours within week
+          return days.reduce((accu, currentValue) => {
+            accu[currentValue] = meta.week[currentValue].freeHours;
+            return accu;
+          }, {});
+        })
+        .then(ret =>
+          commit("setFreeHours", {
+            freeHours: ret
+          })
         );
 
       // TODO: merge prev state with new state and separate into days
     },
-    getWorkHours({ commit }, { uid, day }) {
+    getWorkHours({ commit }, { uid }) {
       db()
         .ref(`${uid}/meta`)
         .once("value", ({ val, key }) => ({
           meta: val(),
           id: key
         }))
-        .then(({ meta, id }) =>
-          commit("setWorkHours", meta.week[day].workHours)
+        .then(({ meta }) => {
+          return days.reduce((accu, currentValue) => {
+            accu[currentValue] = meta.week[currentValue].workHours;
+            return accu;
+          }, {});
+        })
+        .then(val =>
+          commit("setWorkHours", {
+            workHours: val
+          })
         );
     },
-    getLectureHours({ commit }, { uid, day }) {
+    getLectureHours({ commit }, { uid }) {
       db()
         .ref(`${uid}/classes`)
         .once("value", ({ val, key }) => ({
           meta: val(),
           id: key
         }))
-        .then(({ meta, id }) =>
-          commit("setLectureHours", meta.week[day].freeHours)
+        .then(({ meta }) => {
+          return days.reduce((accu, current) => {
+            accu[current] = meta.week[current].lectureHours;
+            return accu;
+          });
+        })
+        .then(val =>
+          commit("setLectureHours", {
+            lectureHours: val
+          })
         );
     },
-    getScheduledTasksforTheDay(
-      {
-        commit,
-        state: { tasks }
-      },
-      { uid, day }
-    ) {
+    getScheduledTasksforTheDay({ commit, state }, { uid, day }) {
+      const { tasks } = state;
       db()
         .ref(`${uid}/tasks`)
         .once("value", snapshot => {
@@ -78,30 +134,55 @@ export const taskManagement = {
           })
         );
     },
-    getEvents({ commit, dispatch }, { uid }) {
-      const freeHoursPromise = days.map(d =>
+    getEvents({ dispatch }, { uid }) {
+      // const freeHoursPromise = days.map(d =>
+      //   dispatch("getFreeHours", {
+      //     uid,
+      //     day: d
+      //   })
+      // );
+
+      // const workHoursPromise = days.map(d =>
+      //   dispatch("getWorkHours", {
+      //     uid,
+      //     days: d
+      //   })
+      // );
+
+      // const lectureHoursPromise = days.map(d =>
+      //   dispatch("getWorkHours", {
+      //     uid,
+      //     day: d
+      //   })
+      // );
+
+      Promise.all([
         dispatch("getFreeHours", {
-          uid,
-          day: d
-        })
-      );
-      const workHoursPromise = days.map(d =>
+          uid
+        }),
         dispatch("getWorkHours", {
-          uid,
-          days: d
+          uid
+        }),
+        dispatch("getLectureHours", {
+          uid
         })
-      );
-
-      const lectureHoursPromise = days.map(d =>
-        dispatch("getWorkHours", {
-          uid,
-          day: d
-        })
-      );
-
-      Promise.all(freeHoursPromise).then(() => {});
-      Promise.all(workHoursPromise).then(() => {});
-      Promise.all(lectureHoursPromise).then(() => {});
+      ]).then(() => {});
+    },
+    getTaskByEarliestDueDate({ commit, state }, { uid }) {
+      db()
+        .ref(`${uid}/tasks`)
+        .once("value", snapshot => {
+          const ls = snapshot
+            .filter(each => {
+              each.done === false;
+              return this.sortedArray(ls);
+            })
+            .then(items =>
+              commit("setTasksByDueDate", {
+                tasksByDueDate: [...state.tasksByDueDate, ...items]
+              })
+            );
+        });
     },
     setTask({ commit, dispatch }, {uid, payload}) {
       console.log("setTask", uid);
@@ -110,5 +191,5 @@ export const taskManagement = {
         console.log("stored");
       }).catch( (e) => {console.log(e.message);});
     }
-  },
+  }
 };
