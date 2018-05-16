@@ -152,6 +152,7 @@ export default new Vuex.Store({
           return u;
         })
         .then(({ user }) => {
+          router.push("/dashboard"),
           commit("setCurrentUser", {
             currentUser: user
           });
@@ -160,7 +161,13 @@ export default new Vuex.Store({
     facebookSignin: ({ commit }) => {
       if (!auth().currentUser) {
         const provider = new firebase.auth.FacebookAuthProvider();
-        auth().signInWithPopup(provider);
+        auth().signInWithPopup(provider)
+        .then(({ user }) => {
+          router.push("/dashboard"),
+          commit("setCurrentUser", {
+            currentUser: user
+          });
+        });
       } else {
         commit("signout");
       }
@@ -168,7 +175,13 @@ export default new Vuex.Store({
     googleSignin: ({ commit }) => {
       if (!auth().currentUser) {
         const provider = new firebase.auth.GoogleAuthProvider();
-        auth().signInWithPopup(provider);
+        auth().signInWithPopup(provider)
+        .then(({ user }) => {
+          router.push("/dashboard"),
+          commit("setCurrentUser", {
+            currentUser: user
+          });
+        })
       } else {
         commit("signout");
       }
