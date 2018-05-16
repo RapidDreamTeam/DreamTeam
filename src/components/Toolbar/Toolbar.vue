@@ -16,9 +16,10 @@
       </v-container>
     </v-content>
 
+
     <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app>
       <v-list dense>
-        <template v-for="item in items">
+        <!-- <template v-for="item in items">
           <v-layout v-if="item.heading" :key="item.heading" row align-center>
             <v-flex xs6>
               <v-subheader v-if="item.heading">
@@ -34,7 +35,7 @@
                 </v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile v-for="(child, i) in item.children" :key="i" @click="">
+            <v-list-tile v-for="(child, i) in item.children" :key="i" @click="$router.push(child.link)">
               <v-list-tile-action v-if="child.icon">
                 <v-icon>{{ child.icon }}</v-icon>
               </v-list-tile-action>
@@ -45,7 +46,7 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
-          <v-list-tile v-else :key="item.text" @click="">
+          <v-list-tile v-else :key="item.text" @click="$router.push(item.link)">
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -55,6 +56,42 @@
               </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+        </template> -->
+        <!-- <v-list-tile></> -->
+
+        <template>
+          <v-list-tile @click.stop="$router.push('/dashboard')">
+            <v-list-tile-action>
+              <v-icon>calendar_today</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Dashboard
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click.stop="addTaskDialog = !addTaskDialog">
+            <v-list-tile-action>
+              <v-icon>calendar_today</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Add Class
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <!-- <v-list-tile @click="$router.push(item.link)">
+            <v-list-tile-action>
+              <v-icon>calendar_today</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Hi
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile> -->
         </template>
       </v-list>
     </v-navigation-drawer>
@@ -63,29 +100,27 @@
 
 <script>
 import ToolbarButton from "./ToolbarButton.vue";
-import AddTaskModal from "../AddTaskModal";
+import AddTaskModal from "../AddTaskModal.vue";
+// import AddSubTaskDialog from "../AddSubTaskModal.vue"
 export default {
-  data: () => ({
+  data(){
+    return ({
     drawer: true,
     dialog: false,
+    addSubTaskDialog: false,
+    addTaskDialog: false,
     items: [
       { heading: "Scheduler" },
-      { icon: "calendar_today", text: "Class Management", link: "/dashboard" },
+      { icon: "calendar_today", text: "Dashboard", link: "/dashboard" },
       { icon: "calendar_today", text: "Task Management", link: "/abc" },
-      { icon: "calendar_today", text: "Time Management", link: "/def" },
-      {
-        icon: "keyboard_arrow_up",
-        "icon-alt": "keyboard_arrow_down",
-        text: "Labels",
-        model: true,
-        children: [{ icon: "add", text: "Create label" }]
-      }
     ]
-  }),
+  })
+},
   methods: {},
   watch: {},
   components: {
-    ToolbarButton
+    ToolbarButton,
+    AddTaskModal
   }
 };
 </script>
