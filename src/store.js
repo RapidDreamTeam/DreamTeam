@@ -96,7 +96,9 @@ export default new Vuex.Store({
     workHours: {},
     lectureHours: {},
     loading: false,
-    currentUser: null
+    currentUser: null,
+    events: [],
+    tasks: {}
   },
   mutations: {
     setFreeHours: (state, { freeHours }) => {
@@ -113,6 +115,9 @@ export default new Vuex.Store({
     },
     setCurrentUser: (state, { currentUser }) => {
       state.currentUser = currentUser;
+    },
+    setTasks: (state, { tasks }) => {
+      state.tasks = tasks;
     }
   },
   actions: {
@@ -200,7 +205,6 @@ export default new Vuex.Store({
         .then(() => router.push("/signin"));
     },
     signout: ({ commit }) => {
-      //  this.$store.dispatch('signout')
       auth().signOut();
       commit("setCurrentUser", null);
       router.push("/login");
@@ -213,10 +217,7 @@ export default new Vuex.Store({
         .sendPasswordResetEmail(user)
         .then(() => router.push("/login"));
     },
-    changePassword: (
-      { commit },
-      { username, currentPassword, newPassword }
-    ) => {
+    changePassword: ( { commit }, { username, currentPassword, newPassword }) => {
       const credential = firebase.auth.EmailAuthProvider.credential(
         username,
         currentPassword
@@ -226,6 +227,18 @@ export default new Vuex.Store({
       return currentUser
         .reauthenticateWithCredential(credential)
         .then(() => currentUser.updatePassword(newPassword));
+    },
+    getScheduledTasksforTheDay: ({ commit, state: {tasks} }, {uid, day}) => {
+      db()
+        .ref(`${uid}/tasks`)
+        .once("value", snapshot => {
+            const d = day.toLowerCase().trim();
+            return snapshot.filter(item => d === item.day.toLowerCase().trim())
+          })
+          // .then(item => item.map({ day, estimatedTime } => ({ day, estimatedTime })))
+          .then((items) => commit("setTasks", {"tasks": [...tasks, ...items]}))
+          // .then(items => commit())
+        // .then(({ meta, id }) => commit("setWorkHours", meta.week[day].workHours));
     }
   },
   getters: {}
