@@ -220,7 +220,9 @@ export default new Vuex.Store({
         );
       // .then(() => router.push("/signin"));
     },
-    signout({ commit }) {},
+    signout({ commit, dispatch }) {
+      dispatch("signoutWithoutPush").then(() => router.push("/signin"));
+    },
     currentUser({ commit }, firebaseUser) {
       commit("setCurrentUser", {
         currentUser: firebaseUser
