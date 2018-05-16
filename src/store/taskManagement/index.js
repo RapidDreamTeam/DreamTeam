@@ -17,7 +17,11 @@ export const taskManagement = {
     lectureHours: {},
     events: [],
     tasks: [],
-    tasksByDueDate: []
+    tasksByDueDate: [],
+    classModal: false
+  },
+  getters:{
+    getClassDialog: state => state.classModal
   },
   computed: {
     sortedArray: function() {
@@ -45,9 +49,16 @@ export const taskManagement = {
     },
     setTasksByDueDate(state, { tasksByDueDate }) {
       state.tasksByDueDate = tasksByDueDate;
+    },
+    setClassModal(state, {modal}) {
+      state.classModal = modal
     }
   },
   actions: {
+    setClassModal({commit}, {modal}) {
+      console.log("classModal", modal)
+      commit("setClassModal", {modal})
+    },
     getFreeHours({ commit }, { uid }) {
       db()
         .ref(`${uid}/meta`)

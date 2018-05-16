@@ -3,7 +3,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import firebase, { db, auth } from "./firebase";
+import firebase, { db, auth } from "./firebase.js";
 import Vuetify from "vuetify";
 import "./registerServiceWorker";
 import "babel-polyfill";

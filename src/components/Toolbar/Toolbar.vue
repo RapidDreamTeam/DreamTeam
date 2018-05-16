@@ -74,7 +74,7 @@
             </v-list-tile-content>
           </v-list-tile>
 
-          <v-list-tile @click.stop="addTaskDialog = !addTaskDialog">
+          <v-list-tile @click.stop="$store.dispatch('setClassModal', {'modal': true})">
             <v-list-tile-action>
               <v-icon>calendar_today</v-icon>
             </v-list-tile-action>

@@ -41,8 +41,8 @@
     <v-btn @click.native.stop="dialogClass=!dialogClass" icon>
       <v-icon>{{ "add" }}</v-icon>
     </v-btn>
-    <v-dialog v-model="dialogClass" max-width="500px">
-      <AddClassModal @close="dialogClass=false" />
+    <v-dialog v-model="this.addClassDialog" max-width="500px">
+      <AddClassModal @close="$store.dispatch('setClassModal', {'modal': false})" />
     </v-dialog>
   </v-app>
 </template>
@@ -52,9 +52,10 @@ import Calendar from "@/components/Calendar.vue";
 import List from "@/components/List.vue";
 import AddTaskModal from "@/components/AddTaskModal";
 import AddClassModal from "@/components/AddClassModal";
+import { mapGetters } from 'vuex'
 
 export default {
-  props: ["dialogClass"]
+  props: ["dialogClass"],
   components: {
     Calendar,
     List,
@@ -64,7 +65,7 @@ export default {
   data: () => ({
     dialog: false,
     addTaskDialog: false,
-    addSubTaskDialog: true
+    // addClassDialog: true
   }),
   methods: {
     dialogClose() {
@@ -74,5 +75,10 @@ export default {
       this.dialogClass = false
     }
   },
+  computed: {
+    ...mapGetters({
+      addClassDialog: "getClassDialog"
+    })
+  }
 };
 </script>
