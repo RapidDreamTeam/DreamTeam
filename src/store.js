@@ -139,7 +139,6 @@ export default new Vuex.Store({
         );
     },
     getLectureHours: ({ commit }, { uid, day }) => {
-      // commit("setLectureHours", null);
       db()
         .ref(`${uid}/classes`)
         .once("value", ({ val, key }) => ({
@@ -153,16 +152,17 @@ export default new Vuex.Store({
     emailSignin: ({ commit }, { username, password }) => {
       return auth()
         .signInWithEmailAndPassword(username, password)
-        .then(u => {
-          console.log(u);
-          return u;
+        .then(user => {
+          commit("setCurrentUser", {
+            currentUser: user
+          });
         })
         .then(() => router.push("/dashboard"));
     },
     facebookSignin: ({ commit }) => {
       if (!auth().currentUser) {
         const provider = new firebase.auth.FacebookAuthProvider();
-        auth()
+        return auth()
           .signInWithPopup(provider)
           .then(() => router.push("/dashboard"));
       } else {
@@ -184,28 +184,27 @@ export default new Vuex.Store({
         .createUserWithEmailAndPassword(username, password)
         .then(({ user }) => {
           user.sendEmailVerification();
-
           return user;
         })
-        .then(user => {
+        .then(user =>
           commit("setCurrentUser", {
             currentUser: user
-          });
-        })
+          })
+        )
         .then(() => router.push("/signin"));
     },
     signout: ({ commit }) => {
-      //  this.$store.dispatch('signout')
-      auth().signOut();
-      commit("setCurrentUser", null);
-      router.push("/login");
+      auth()
+        .signOut()
+        .then(() => commit("setCurrentUser", null))
+        .then(() => router.push("/login"));
     },
     currentUser: ({ commit }, firebaseUser) => {
-      commit("setCurrentUser", firebase);
+      commit("setCurrentUser", firebaseUser);
     },
     resetPassword: ({ commit }, { username }) => {
       return auth()
-        .sendPasswordResetEmail(user)
+        .sendPasswordResetEmail(username)
         .then(() => router.push("/login"));
     },
     changePassword: (
