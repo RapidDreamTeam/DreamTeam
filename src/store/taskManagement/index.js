@@ -1,3 +1,5 @@
+import { db } from "@/firebase.js";
+
 export const taskManagement = {
   state: {
     freeHours: {},
@@ -100,6 +102,13 @@ export const taskManagement = {
       Promise.all(freeHoursPromise).then(() => {});
       Promise.all(workHoursPromise).then(() => {});
       Promise.all(lectureHoursPromise).then(() => {});
+    },
+    setTask({ commit, dispatch }, {uid, payload}) {
+      console.log("setTask", uid);
+      console.log("task", payload);
+      db().ref(`${uid}/tasks`).push(payload).then( () => {
+        console.log("stored");
+      }).catch( (e) => {console.log(e.message);});
     }
   },
 };

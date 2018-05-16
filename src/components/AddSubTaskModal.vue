@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      <span class="headline">Ahh a sub task</span>
+      <span class="headline">Add a sub task</span>
     </v-card-title>
     <v-card-text>
       <v-form ref="form" v-model="valid" lazy-validation>
@@ -15,13 +15,18 @@
                 required
               />
             </v-flex>
+            <v-flex xs9>
+              <v-slider :min="1" :max="4" v-model="estimatedTime" label="Estimated Time"></v-slider>
+            </v-flex>
+            <v-flex xs3>
+              <v-text-field :rules="[() => (estimatedTime > 0 && estimatedTime <= 4) || 'Out of range']" v-model="estimatedTime" type="number"></v-text-field>
+            </v-flex>
             <v-flex xs12 lg6 v-if="!auto">
               <v-menu
                 :close-on-content-click="false"
                 v-model="timeMenu"
                 :nudge-right="40"
-                lazy
-                transition="scale-transidistion"
+                transition="scale-transition"
                 offset-y
                 full-width
                 max-width="290px"
@@ -44,7 +49,6 @@
                 :close-on-content-click="false"
                 v-model="dateMenu"
                 :nudge-right="40"
-                lazy
                 transition="scale-transition"
                 offset-y
                 full-width
@@ -74,6 +78,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   export default {
     props: ['visible', 'auto'],
     computed: {
@@ -83,9 +88,8 @@
         },
         set (value) {
           if (!value) {
-            if (this.doTime !== null && this.doDate !== null) {
-              this.$emit('close', null)
-            }
+            this.clearForm();
+            this.$emit('close', null)
           }
         }
       }
@@ -97,6 +101,7 @@
         nameRules: [
           v => !!v || 'Name is required',
         ],
+        estimatedTime: 1,
         doTime: null,
         doDate: null,
         timeMenu: false,
@@ -104,17 +109,42 @@
       }
     },
     methods: {
+      clearForm() {
+        this.valid = false;
+        this.subTaskName = "";
+        this.estimatedTime = 1;
+        this.doTime = null;
+        this.doDate = null;
+        this.timeMenu = false;
+        this.dateMenu = false;
+      },
       closeSubTask() {
         console.log("cancel");
         this.$emit('close', null);
       },
       submitSubTask() {
-        console.log(this.doDate, this.doTime);
-        if (!this.auto) {
-          this.$emit('close', {"name": this.subTaskName, "time": this.doTime, 'date': this.doDate});
-        } else {
-          this.$emit('close', {"name": this.subTaskName});
-        }
+        const days = [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday"
+        ];
+        const payload = {
+          "name": this.subTaskName,
+          "estimatedTime": this.estimatedTime,
+          "startTime": !this.auto ? this.doTime : "",
+          "date": !this.auto ? this.doDate : "",
+          "day": !this.auto ? days[moment(this.doDate, "YYYY-M-D").day()] : "",
+          "done": false,
+          "isScheduled": false,
+          "time": "23:59",
+          "endTime": !this.auto ? moment(this.doTime, "YYYY-M-D").add(this.estimatedTime, 'hours').format("YYYY-M-D") : ""
+        };
+        this.clearForm();
+        this.$emit('close', payload);
       }
     }
   };
