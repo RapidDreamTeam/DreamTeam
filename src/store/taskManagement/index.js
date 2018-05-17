@@ -18,10 +18,12 @@ export const taskManagement = {
     events: [],
     tasks: [],
     tasksByDueDate: [],
-    classModal: false
+    classModal: false,
+    workfreeModal: false
   },
   getters: {
-    getClassDialog: state => state.classModal
+    getClassDialog: state => state.classModal,
+    getWFModal: state => state.workfreeModal
   },
   computed: {
     sortedArray: function() {
@@ -30,7 +32,6 @@ export const taskManagement = {
         if (a.dueDate > b.dueDate) return 1;
         return 0;
       }
-
       return this.arrays.sort(compare);
     }
   },
@@ -52,12 +53,20 @@ export const taskManagement = {
     },
     setClassModal(state, { modal }) {
       state.classModal = modal;
+    },
+    setWorkFreeModal(state, { modal }) {
+      state.workfreeModal = modal;
     }
   },
   actions: {
     setClassModal({ commit }, { modal }) {
-      console.log("classModal", modal);
       commit("setClassModal", {
+        modal
+      });
+    },
+
+    setWorkFreeModal({ commit }, { modal }) {
+      commit("setWorkFreeModal", {
         modal
       });
     },
