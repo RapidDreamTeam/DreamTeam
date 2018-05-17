@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import firebase, { auth } from "@/firebase.js";
 export default {
   components: {  },
   props: {
@@ -87,7 +88,7 @@ export default {
         "endTime": this.endTime,
         "day": days
       };
-      const uid = this.$store.getters.getUid.toString();
+      const uid = auth().currentUser.uid.toString();
       // console.log("uiddddd",uid);
       const class2 = {'uid': uid,'payload': payload};
       console.log(class2);
