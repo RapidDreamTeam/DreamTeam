@@ -105,8 +105,17 @@ export default {
       subTaskDialog: false,
       checkbox: false,
       dueDate: null,
-      dateMenu: false,
-      subTasks: []
+      dateMenu: true,
+      subTasks: [],
+      days  :[
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday"
+      ]
     }
   },
   methods: {
@@ -140,7 +149,44 @@ export default {
       // console.log("uiddddd",uid);
       const task = {'uid': auth().currentUser.uid,'payload': payload};
       console.log(task);
+      this.scheduleTask(payload, uid)
       this.$store.dispatch('setTask', task)
+    },
+    scheduleTask( payload , uid ) {
+      console.log("scheduling");
+      this.$store.dispatch('getWorkHours', {uid})
+      const workHours = this.$store.getters.getWork
+
+      const currentDay = moment().format("dddd")
+      const dueDay = moment(payload.dueDate).format("dddd").toLowerCase()
+
+      const currentDayIndex = days.indexOf(currentDay)
+      const dueDayIndex = days.indexOf(dueDay)
+
+      if (currentDayIndex > dueDayIndex){
+        alert("Your due date has been passed.")
+        return;
+      }
+
+      workhours.forEach( wh => {
+        const start = moment(wh.startTime).hours();
+        const end = moment(wh.endTime).hours();
+        const hours = end - start;
+
+
+        // If task can fit in the slot and the slot is not occupied
+        if (payload.estimatedTime <= hours && wh.occupied == false){
+          // Occupy the slot and update the subtask to scheduled
+        } else if (payload.estimatedTime > hours && wh.occupied == false){
+          // Divide the task and occupy that many slots and update the subtask to scheduled
+        } else {
+          // Fuck
+        }
+
+
+      })
+
+
     }
   }
 };
