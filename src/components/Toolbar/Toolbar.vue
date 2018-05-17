@@ -74,13 +74,24 @@
             </v-list-tile-content>
           </v-list-tile>
 
-          <v-list-tile @click.stop="$store.dispatch('setClassModal', {'modal': true})">
+          <v-list-tile @click.stop="$store.dispatch('setClassModal', {'modal': true })">
             <v-list-tile-action>
               <v-icon>calendar_today</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>
                 Add Class
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click.stop="$store.dispatch('setWorkFreeModal', {'modal': true })">
+            <v-list-tile-action>
+              <v-icon>calendar_today</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Add Work Hour / Add Free Hour
               </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
