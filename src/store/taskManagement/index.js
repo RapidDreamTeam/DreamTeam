@@ -8,6 +8,26 @@ const days = [
   "sunday"
 ];
 
+const day_idx = {
+  monday: 0,
+  tuesday: 1,
+  wednesday: 2,
+  thursday: 3,
+  friday: 4,
+  saturday: 5,
+  sunday: 6
+};
+
+const day_offset = {
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+  sunday: 0
+};
+
 import { db } from "@/firebase.js";
 import moment from "moment";
 export const taskManagement = {
@@ -63,6 +83,31 @@ export const taskManagement = {
         }
       });
       console.log(list);
+      return list;
+    },
+    getTasksAsCalendar: (state, getters) => {
+      console.log("getTasksAsCalendar");
+      const tasks = getters.getTasks;
+      let list = [];
+
+      const dow = moment().format("dddd").toLowerCase();
+      const start = moment().subtract(day_offset[dow], "days");
+      tasks.forEach( tasks => {
+        console.log(tasks);
+        tasks.subtask.forEach( subTask => {
+          if (subTask.isScheduled) {
+            const time = moment(subTask.startTime, "HH:mm");
+            const startTaskTime = start.add(day_offset[subTask.day], "days").second(0).minute(time.minute()).hour(time.hour());
+            const taskPayload = {
+              title: subTask.name,
+              start: startTaskTime.format(),
+              end: startTaskTime.add(subTask.estimatedTime, "hours").format(),
+            };
+            list = list.concat([taskPayload]);
+          }
+        })
+      });
+      console.log("LIST", list);
       return list;
     }
   },

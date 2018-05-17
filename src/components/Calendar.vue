@@ -10,23 +10,26 @@ export default {
   },
   data() {
     return {
-      events: [
-        {
-            title  : 'event1',
-            start  : '2010-01-01',
-        },
-        {
-            title  : 'event2',
-            start  : '2018-05-15',
-            end    : '2018-05-16',
-        },
-        {
-            title  : 'event3',
-            start  : '2018-05-15T18:30:00',
-            allDay : false,
-        },
-      ]
+      // events: [
+      //   {
+      //       title  : 'event1',
+      //       start  : '2010-01-01',
+      //   },
+      //   {
+      //       title  : 'event2',
+      //       start  : '2018-05-15',
+      //       end    : '2018-05-16',
+      //   },
+      //   {
+      //       title  : 'event3',
+      //       start  : '2018-05-15T18:30:00',
+      //       allDay : false,
+      //   },
+      // ]
     }
+  },
+  computed: {
+    events() { return this.$store.getters.getTasksAsCalendar }
   },
   methods: {}
 };
