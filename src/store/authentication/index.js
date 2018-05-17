@@ -16,7 +16,7 @@ export const authentication = {
         .signInWithEmailAndPassword(username, password)
         .then(user => {
           commit("setCurrentUser", {
-            currentUser: user
+            currentUser: user.user
           });
         })
         .then(() => router.push("/dashboard"));
@@ -26,6 +26,11 @@ export const authentication = {
         const provider = new firebase.auth.FacebookAuthProvider();
         return auth()
           .signInWithPopup(provider)
+          .then(user => {
+            commit("setCurrentUser", {
+              currentUser: user.user
+            });
+          })
           .then(() => router.push("/dashboard"));
       } else {
         commit("signout");
@@ -36,6 +41,11 @@ export const authentication = {
         const provider = new firebase.auth.GoogleAuthProvider();
         auth()
           .signInWithPopup(provider)
+          .then(user => {
+            commit("setCurrentUser", {
+              currentUser: user.user
+            });
+          })
           .then(() => router.push("/dashboard"));
       } else {
         commit("signout");

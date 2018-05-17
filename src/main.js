@@ -26,11 +26,17 @@ const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
     beforeRouteEnter(to, from, next) {
       if (["/"].includes(this.$router.path)) {
         // store.dispatch("signoutWithoutRedirect")
+
+        console.log(firebaseUser.user);
+
+        if (firebaseUser) {
+          store.dispatch("currentUser", firebaseUser.user);
+        }
         next("/");
       } else if (firebaseUser) {
         console.log(firebaseUser);
         store
-          .dispatch("currentUser", firebaseUser)
+          .dispatch("currentUser", firebaseUser.user)
           .then(() => next("/dashboard"));
       } else {
         store.dispatch("signout", null);
