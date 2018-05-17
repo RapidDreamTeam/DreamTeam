@@ -54,7 +54,7 @@ export const taskManagement = {
     setClassModal(state, { modal }) {
       state.classModal = modal;
     },
-    setWorkFreeModal(state, { modal }) {
+    setFreeModal(state, { modal }) {
       state.workfreeModal = modal;
     }
   },
@@ -65,8 +65,8 @@ export const taskManagement = {
       });
     },
 
-    setWorkFreeModal({ commit }, { modal }) {
-      commit("setWorkFreeModal", {
+    setFreeModal({ commit }, { modal }) {
+      commit("setFreeModal", {
         modal
       });
     },
@@ -195,12 +195,18 @@ export const taskManagement = {
             );
         });
     },
-    setTask({ commit, dispatch }, {uid, payload}) {
+    setTask({ commit, dispatch }, { uid, payload }) {
       console.log("setTask", uid);
       console.log("task", payload);
-      db().ref(`${uid}/tasks`).push(payload).then( () => {
-        console.log("stored");
-      }).catch( (e) => {console.log(e.message);});
+      db()
+        .ref(`${uid}/tasks`)
+        .push(payload)
+        .then(() => {
+          console.log("stored");
+        })
+        .catch(e => {
+          console.log(e.message);
+        });
     }
   }
 };
