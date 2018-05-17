@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { auth, db } from "@/firebase.js";
 import { authentication } from "./authentication";
 import { taskManagement } from "./taskManagement";
 

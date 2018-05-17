@@ -1,16 +1,36 @@
 <template>
   <v-card>
     <v-card-title>
-      <span class="headline">Ahh a task</span>
+      <span class="headline">Add a task</span>
     </v-card-title>
     <v-card-text>
       <v-container grid-list-md>
         <v-layout wrap>
           <v-flex xs12 sm8 md8>
-            <v-text-field label="Assignment Name" required/>
+            <v-text-field
+              v-model="name"
+              :rules="nameRules"
+              label="Assignment Name"
+              required
+            />
           </v-flex>
           <v-flex xs12 sm4 md4>
-            <v-checkbox v-model="checkbox" label="Auto"/>
+            <v-checkbox v-model="checkbox" label="Auto"></v-checkbox>
+          </v-flex>
+            <v-flex xs8 v-if="subTasks.length === 0">
+              <v-slider :min="1" :max="4" v-model="estimatedTime" label="Estimated Time"></v-slider>
+            </v-flex>
+            <v-flex xs3 v-if="subTasks.length === 0">
+              <v-text-field :rules="[() => (estimatedTime > 0 && estimatedTime <= 4) || 'Out of range']" v-model="estimatedTime" type="number"></v-text-field>
+            </v-flex>
+          <v-flex>
+            <v-list>
+              <v-list-tile v-for="(subTask, index) in subTasks" :key="index">
+                <v-list-tile-content>
+                  <v-list-tile-title v-text="subTask.name"></v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
           </v-flex>
           <v-btn @click.native.stop="subTaskDialog=!subTaskDialog" icon>
             <v-icon>{{ "add" }}</v-icon>
@@ -23,7 +43,7 @@
           <v-menu
             ref="menu"
             :close-on-content-click="false"
-            v-model="menu2"
+            v-model="dateMenu"
             :nudge-right="40"
             :return-value.sync="dueDate"
             lazy
@@ -45,7 +65,7 @@
       </v-flex>
         <v-spacer/>
         <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
-        <v-btn flat @click="dialog = false">Save</v-btn>
+        <v-btn flat @click="submitTask">Save</v-btn>
       </v-container>
     </v-card-text>
   </v-card>
@@ -75,20 +95,43 @@ export default {
   },
   data () {
     return {
+      name: "",
+      nameRules: [
+        v => !!v || 'Name is required',
+      ],
+      estimatedTime: 0,
       subTaskDialog: false,
       checkbox: false,
       dueDate: null,
-      menu2: true,
+      dateMenu: true,
       subTasks: []
     }
   },
   methods: {
     closeSubTaskDialog (a) {
       this.subTaskDialog = false;
-      this.subTasks = this.subTasks.concat([a]);
-      console.log(a);
-      console.log(this.subTasks)
+      if (a !== null) {
+        this.subTasks = this.subTasks.concat([a]);
+        console.log(a);
+        console.log(this.subTasks)
+      }
     },
+    submitTask() {
+      console.log("submit");
+      const payload = {
+        "auto": this.checkbox,
+        "name": this.name,
+        "estimatedTime": this.estimatedTime,
+        "dueDate": this.dueDate,
+        "done": false,
+        "subtask": this.subTasks
+      };
+      const uid = this.$store.getters.getUid.toString();
+      // console.log("uiddddd",uid);
+      const task = {'uid': uid,'payload': payload};
+      console.log(task);
+      this.$store.dispatch('setTask', task)
+    }
   }
 };
 </script>

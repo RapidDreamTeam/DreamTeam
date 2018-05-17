@@ -174,6 +174,13 @@ export const taskManagement = {
             );
         });
     },
+    setTask({ commit, dispatch }, {uid, payload}) {
+      console.log("setTask", uid);
+      console.log("task", payload);
+      db().ref(`${uid}/tasks`).push(payload).then( () => {
+        console.log("stored");
+      }).catch( (e) => {console.log(e.message);});
+    },
     setClass({ commit, dispatch }, {uid, payload}) {
       console.log("setClass", uid);
       console.log("class", payload);
