@@ -74,6 +74,7 @@
 <script>
 import moment from 'moment';
 import AddSubTaskModal from "./AddSubTaskModal";
+import { auth } from '@/firebase.js';
 export default {
   components: { AddSubTaskModal },
   props: {
@@ -136,9 +137,8 @@ export default {
         "subtask": this.subTasks
       };
       this.clearForm();
-      const uid = this.$store.getters.getUid.toString();
       // console.log("uiddddd",uid);
-      const task = {'uid': uid,'payload': payload};
+      const task = {'uid': auth().currentUser.uid,'payload': payload};
       console.log(task);
       this.$store.dispatch('setTask', task)
     }

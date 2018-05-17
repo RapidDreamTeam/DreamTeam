@@ -23,7 +23,25 @@ export const taskManagement = {
   },
   getters: {
     getClassDialog: state => state.classModal,
-    getWFModal: state => state.workfreeModal
+    getWFModal: state => state.workfreeModal,
+    getTasks: state => state.tasks,
+    getTasksAsList: (state, getters) => {
+      console.log(getters);
+      console.log(getters.getTasks);
+      const tasks = getters.getTasks;
+      console.log(tasks);
+      console.log("GetTasksAsList");
+      let list = [{ header: "Today" }];
+      tasks.forEach( task => {
+        console.log("loop tasks: ", task);
+        console.log(moment.unix(task.dueDate).format('YYYY-M-D'), moment().format('YYYY-M-D'));
+        if (moment.unix(task.dueDate).format('YYYY-M-D') === moment().format('YYYY-M-D') ) {
+          list = list.concat([{ title: task.name, subtitle: "Due Today"}, { divider: true, inset: true }])
+        }
+      });
+      console.log(list);
+      return list;
+    },
   },
   computed: {
     sortedArray: function() {
@@ -45,7 +63,7 @@ export const taskManagement = {
     setLectureHours(state, { lectureHours }) {
       state.lectureHours = lectureHours;
     },
-    setTasks(state, { tasks }) {
+    setTasks(state, tasks) {
       state.tasks = tasks;
     },
     setTasksByDueDate(state, { tasksByDueDate }) {
@@ -179,21 +197,36 @@ export const taskManagement = {
         })
       ]).then(() => {});
     },
-    getTaskByEarliestDueDate({ commit, state }, { uid }) {
+    getTaskByEarliestDueDate({ commit, state }, uid) {
+      let taskList = [];
       db()
-        .ref(`${uid}/tasks`)
-        .once("value", snapshot => {
-          const ls = snapshot
-            .filter(each => {
-              each.done === false;
-              return this.sortedArray(ls);
-            })
-            .then(items =>
-              commit("setTasksByDueDate", {
-                tasksByDueDate: [...state.tasksByDueDate, ...items]
-              })
-            );
-        });
+        .ref(`${uid}/tasks`).orderByChild('dueDate').limitToLast(100).once('value', snapshot => {
+          console.log("snapshot: ", snapshot);
+          snapshot.forEach(childSnapshot => {
+            console.log("child: ", childSnapshot);
+            console.log(childSnapshot.val());
+            let task = {task: childSnapshot.val(), id: childSnapshot.key};
+            taskList = taskList.concat([task.task]);
+          });
+          console.log("taskList",taskList);
+          commit("setTasks", taskList);
+      }).then(() => {
+        console.log("GetTasks Complete")
+      }).catch( e => {
+        console.log("Get Tasks error: ", e.message);
+      });
+        // .once("value", snapshot => {
+        //   const ls = snapshot
+        //     .filter(each => {
+        //       each.done === false;
+        //       return this.sortedArray(ls);
+        //     })
+        //     .then(items =>
+        //       commit("setTasksByDueDate", {
+        //         tasksByDueDate: [...state.tasksByDueDate, ...items]
+        //       })
+        //     );
+        // });
     },
     setTask({ commit, dispatch }, {uid, payload}) {
       console.log("setTask", uid);
