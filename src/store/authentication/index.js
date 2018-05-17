@@ -95,5 +95,9 @@ export const authentication = {
         .reauthenticateWithCredential(credential)
         .then(() => currentUser.updatePassword(newPassword));
     }
+  },
+  getters: {
+    getCurrentUser: state => state.currentUser,
+    getUid: state => state.currentUser.uid,
   }
 };

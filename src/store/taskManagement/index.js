@@ -146,27 +146,6 @@ export const taskManagement = {
         );
     },
     getEvents({ dispatch }, { uid }) {
-      // const freeHoursPromise = days.map(d =>
-      //   dispatch("getFreeHours", {
-      //     uid,
-      //     day: d
-      //   })
-      // );
-
-      // const workHoursPromise = days.map(d =>
-      //   dispatch("getWorkHours", {
-      //     uid,
-      //     days: d
-      //   })
-      // );
-
-      // const lectureHoursPromise = days.map(d =>
-      //   dispatch("getWorkHours", {
-      //     uid,
-      //     day: d
-      //   })
-      // );
-
       Promise.all([
         dispatch("getFreeHours", {
           uid
@@ -194,6 +173,13 @@ export const taskManagement = {
               })
             );
         });
+    },
+    setClass({ commit, dispatch }, {uid, payload}) {
+      console.log("setClass", uid);
+      console.log("class", payload);
+      db().ref(`${uid}/class`).push(payload).then( () => {
+        console.log("stored");
+      }).catch( (e) => {console.log(e.message);});
     }
   }
 };

@@ -28,6 +28,7 @@ const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
         // store.dispatch("signoutWithoutRedirect")
         next("/");
       } else if (firebaseUser) {
+        console.log(firebaseUser);
         store
           .dispatch("currentUser", firebaseUser)
           .then(() => next("/dashboard"));

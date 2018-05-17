@@ -21,13 +21,23 @@
           </v-flex>
 
           <v-flex xs12 sm8 md8>
+            <v-text-field label="First Day of Class" v-model="firstDay" required/>
+          </v-flex>
+        </v-layout>
+
+        <v-flex xs12 sm8 md8>
+          <v-text-field label="Second Day of Class" v-model="secondDay" required/>
+        </v-flex>
+      </v-layout>
+
+          <v-flex xs12 sm8 md8>
             <v-text-field label="Alert before" v-model="alertBefore" required/>
           </v-flex>
         </v-layout>
 
         <v-spacer/>
         <v-btn flat @click="dialog = false">Cancel</v-btn>
-        <v-btn flat color="primary" @click="dialog = false">Save</v-btn>
+        <v-btn flat color="primary" @click="submitClass">Save</v-btn>
       </v-container>
     </v-card-text>
   </v-card>
@@ -57,12 +67,32 @@ export default {
   data () {
     return {
       name: "",
-      rm: "",
+      rm: 0,
       startTime: "",
       endTime: "",
-      alertBefore: 0
+      alertBefore: 0,
+      firstDay : "",
+      secondDay: ""
     }
   },
-  methods: {}
+  methods: {
+    submitClass() {
+      console.log("submit");
+
+      const days = [this.firstDay, this.secondDay]
+      const payload = {
+        "name": this.name,
+        "room": this.rm,
+        "startTime": this.startTime,
+        "endTime": this.endTime,
+        "day": days
+      };
+      const uid = this.$store.getters.getUid.toString();
+      // console.log("uiddddd",uid);
+      const class2 = {'uid': uid,'payload': payload};
+      console.log(class2);
+      this.$store.dispatch('setClass', class2)
+    }
+  }
 };
 </script>
