@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import AddSubTaskModal from "./AddSubTaskModal";
 export default {
   components: { AddSubTaskModal },
@@ -103,11 +104,19 @@ export default {
       subTaskDialog: false,
       checkbox: false,
       dueDate: null,
-      dateMenu: true,
+      dateMenu: false,
       subTasks: []
     }
   },
   methods: {
+    clearForm() {
+      this.name = "";
+      this.estimatedTime = 1;
+      this.subTaskDialog = false;
+      this.checkbox = false;
+      this.dateMenu = false;
+      this.subTasks = [];
+    },
     closeSubTaskDialog (a) {
       this.subTaskDialog = false;
       if (a !== null) {
@@ -122,10 +131,11 @@ export default {
         "auto": this.checkbox,
         "name": this.name,
         "estimatedTime": this.estimatedTime,
-        "dueDate": this.dueDate,
+        "dueDate": moment(this.dueDate, "YYYY-M-D").unix(),
         "done": false,
         "subtask": this.subTasks
       };
+      this.clearForm();
       const uid = this.$store.getters.getUid.toString();
       // console.log("uiddddd",uid);
       const task = {'uid': uid,'payload': payload};
