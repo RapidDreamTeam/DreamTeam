@@ -1,14 +1,11 @@
 <template>
   <v-card>
     <v-card-title>
-      <span class="headline">Add Free Time</span>
+      <span class="headline">Add Work Time</span>
     </v-card-title>
     <v-card-text>
       <v-container grid-list-md>
         <v-layout wrap>
-          <v-flex xs12 sm8 md8>
-            <v-subheader v-text="'Multiple (Chips) with persistent hint'"></v-subheader>
-          </v-flex>
           <v-flex xs12 sm6>
             <v-select
               :items="days"
@@ -16,7 +13,7 @@
               label="Select"
               multiple
               chips
-              hint="What are the target regions"
+              hint="Select Days"
               persistent-hint
             ></v-select>
         </v-flex>
@@ -69,7 +66,7 @@ export default {
   },
   methods: {
     onSave() {
-      this.$store.dispatch("setFreeTime", {
+      this.$store.dispatch("setWorkTime", {
         days: this.picked,
         startTime: this.startTime,
         endTime: this.endTime,

@@ -19,11 +19,13 @@ export const taskManagement = {
     tasks: [],
     tasksByDueDate: [],
     classModal: false,
-    workfreeModal: false
+    freeModal: false,
+    workModal: false
   },
   getters: {
     getClassDialog: state => state.classModal,
-    getWFModal: state => state.workfreeModal,
+    getFreeModal: state => state.freeModal,
+    getWorkModal: state => state.workModal,
     getTasks: state => state.tasks,
     getTasksAsList: (state, getters) => {
       console.log(getters);
@@ -60,8 +62,7 @@ export const taskManagement = {
       });
       console.log(list);
       return list;
-    },
-    getWorkFreeModal: state => state.workfreeModal
+    }
   },
   computed: {
     sortedArray: function() {
@@ -93,12 +94,16 @@ export const taskManagement = {
       state.classModal = modal;
     },
     setFreeModal(state, { modal }) {
-      state.workfreeModal = modal;
+      console.log("mutate");
+      state.freeModal = modal;
+    },
+    setWorkModal(state, { modal }) {
+      state.workModal = modal;
     }
   },
   actions: {
-    setWorkFreeModal({ commit }, { modal }) {
-      commit("setFreeModal", {
+    setWorkModal({ commit }, { modal }) {
+      commit("setWorkModal", {
         modal
       });
     },
@@ -109,6 +114,7 @@ export const taskManagement = {
     },
 
     setFreeModal({ commit }, { modal }) {
+      console.log("action");
       commit("setFreeModal", {
         modal
       });
@@ -189,27 +195,6 @@ export const taskManagement = {
         );
     },
     getEvents({ dispatch }, { uid }) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       Promise.all([
         dispatch("getFreeHours", {
           uid
@@ -298,12 +283,37 @@ export const taskManagement = {
 
       // Check and append to db
     },
-    setClass({ commit, dispatch }, {uid, payload}) {
+    setWorkTime({ commit }, { days, startTime, endTime, uid }) {
+      // db().ref(`${uid}/meta/week`)
+
+      const persistData = days.reduce((accu, current) => {
+        accu[current] = {
+          workHours: {
+            startTime,
+            endTime
+          }
+        };
+        return accu;
+      }, {});
+
+      Object.keys(persistData).forEach(day => {
+        db()
+          .ref(`${uid}/meta/week/${day}/workHours`)
+          .push(persistData[day].workHours);
+      });
+    },
+    setClass({ commit, dispatch }, { uid, payload }) {
       console.log("setClass", uid);
       console.log("class", payload);
-      db().ref(`${uid}/class`).push(payload).then( () => {
-        console.log("stored");
-      }).catch( (e) => {console.log(e.message);});
+      db()
+        .ref(`${uid}/class`)
+        .push(payload)
+        .then(() => {
+          console.log("stored");
+        })
+        .catch(e => {
+          console.log(e.message);
+        });
     }
   }
 };

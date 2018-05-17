@@ -46,8 +46,12 @@
       <AddClassModal @close="$store.dispatch('setClassModal', {'modal': false})" />
     </v-dialog>
 
-    <v-dialog v-model="workFreeModal" max-width="500px">
-      <AddFreeTime @close="$store.dispatch('setWorkFreeModal', {'modal': false})" />
+    <v-dialog v-model="freeModal" max-width="500px">
+      <AddFreeModal @close="$store.dispatch('setFreeModal', {'modal': false})" />
+    </v-dialog>
+
+    <v-dialog v-model="workModal" max-width="500px">
+      <AddWorkTime @close="$store.dispatch('setWorkModal', {'modal': false})" />
     </v-dialog>
   </v-app>
 </template>
@@ -57,7 +61,8 @@ import Calendar from "@/components/Calendar.vue";
 import List from "@/components/List.vue";
 import AddTaskModal from "@/components/AddTaskModal";
 import AddClassModal from "@/components/AddClassModal";
-import AddFreeTime from "@/components/AddFreeTime";
+import AddFreeModal from "@/components/AddFreeModal";
+import AddWorkTime from "@/components/AddWorkTime";
 import { mapGetters } from "vuex";
 
 export default {
@@ -67,7 +72,8 @@ export default {
     List,
     AddTaskModal,
     AddClassModal,
-    AddFreeTime
+    AddFreeModal,
+    AddWorkTime
   },
   data: () => ({
     dialog: false,
@@ -85,7 +91,8 @@ export default {
   computed: {
     ...mapGetters({
       addClassDialog: "getClassDialog",
-      workFreeModal: "getWorkFreeModal"
+      freeModal: "getFreeModal",
+      workModal: "getWorkModal"
     })
   }
 };
