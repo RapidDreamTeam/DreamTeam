@@ -4779,10 +4779,6 @@ moment@^2.20.1, moment@^2.22.1:
   version "2.22.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.1.tgz#529a2e9bf973f259c9643d237fda84de3a26e8ad"
 
-momentjs@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/momentjs/-/momentjs-2.0.0.tgz#73df904b4fa418f6e3c605e831cef6ed5518ebd4"
-
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -7305,6 +7301,10 @@ vue-template-compiler@^2.5.13, vue-template-compiler@^2.5.16:
 vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
+
+vue-video-background@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/vue-video-background/-/vue-video-background-0.1.2.tgz#6149a30dbbf34a2d01ea009b0c951783055387b8"
 
 vue-videobg@^2.0.0:
   version "2.0.0"
