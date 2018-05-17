@@ -26,7 +26,7 @@ export const taskManagement = {
     getClassDialog: state => state.classModal,
     getFreeModal: state => state.freeModal,
     getWorkModal: state => state.workModal,
-    getWork: state => state.workHours
+    getWork: state => state.workHours,
     getTasks: state => state.tasks,
     getTasksAsList: (state, getters) => {
       console.log(getters);
