@@ -12,9 +12,9 @@ import { db } from "@/firebase.js";
 import moment from "moment";
 export const taskManagement = {
   state: {
-    freeHours: {},
-    workHours: {},
-    lectureHours: {},
+    freeHours: [],
+    workHours: [],
+    lectureHours: [],
     events: [],
     tasks: [],
     tasksByDueDate: [],
@@ -23,7 +23,8 @@ export const taskManagement = {
   },
   getters: {
     getClassDialog: state => state.classModal,
-    getWFModal: state => state.workfreeModal
+    getWFModal: state => state.workfreeModal,
+    getWork: state => state.workHours
   },
   computed: {
     sortedArray: function() {
