@@ -107,7 +107,7 @@
             </v-list-tile-content>
           </v-list-tile>
 
-          <v-list-tile @click.stop="$store.dispatch('getWorkHours', {'uid': uid() })">
+          <!-- <v-list-tile @click.stop="$store.dispatch('getWorkHours', {'uid': uid() })">
             <v-list-tile-action>
               <v-icon>calendar_today</v-icon>
             </v-list-tile-action>
@@ -116,7 +116,7 @@
                 Compute
               </v-list-tile-title>
             </v-list-tile-content>
-          </v-list-tile>
+          </v-list-tile> -->
 
           <!-- <v-list-tile @click="$router.push(item.link)">
             <v-list-tile-action>
