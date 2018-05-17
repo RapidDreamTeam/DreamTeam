@@ -46,26 +46,26 @@
 <script>
 import firebase, { auth } from "@/firebase.js";
 export default {
-  components: {  },
+  components: {},
   props: {
-    dialogVisible: Boolean,
+    dialogVisible: Boolean
   },
   computed: {
     dialog: {
-      get () {
+      get() {
         if (this.dialogVisible) {
           console.log("visible");
         }
         return this.dialogVisible;
       },
-      set (value) {
+      set(value) {
         if (!value) {
-          this.$emit('close');
+          this.$emit("close");
         }
       }
     }
   },
-  data () {
+  data() {
     return {
       name: "",
       rm: 0,

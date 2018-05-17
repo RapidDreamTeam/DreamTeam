@@ -23,7 +23,45 @@ export const taskManagement = {
   },
   getters: {
     getClassDialog: state => state.classModal,
-    getWFModal: state => state.workfreeModal
+    getWFModal: state => state.workfreeModal,
+    getTasks: state => state.tasks,
+    getTasksAsList: (state, getters) => {
+      console.log(getters);
+      console.log(getters.getTasks);
+      const tasks = getters.getTasks;
+      console.log(tasks);
+      console.log("GetTasksAsList");
+      let list = [
+        {
+          header: "Today"
+        }
+      ];
+      tasks.forEach(task => {
+        console.log("loop tasks: ", task);
+        console.log(
+          moment.unix(task.dueDate).format("YYYY-M-D"),
+          moment().format("YYYY-M-D")
+        );
+        if (
+          moment.unix(task.dueDate).format("YYYY-M-D") ===
+          moment().format("YYYY-M-D")
+        ) {
+          list = list.concat([
+            {
+              title: task.name,
+              subtitle: "Due Today"
+            },
+            {
+              divider: true,
+              inset: true
+            }
+          ]);
+        }
+      });
+      console.log(list);
+      return list;
+    },
+    getWorkFreeModal: state => state.workfreeModal
   },
   computed: {
     sortedArray: function() {
@@ -45,7 +83,7 @@ export const taskManagement = {
     setLectureHours(state, { lectureHours }) {
       state.lectureHours = lectureHours;
     },
-    setTasks(state, { tasks }) {
+    setTasks(state, tasks) {
       state.tasks = tasks;
     },
     setTasksByDueDate(state, { tasksByDueDate }) {
@@ -54,19 +92,24 @@ export const taskManagement = {
     setClassModal(state, { modal }) {
       state.classModal = modal;
     },
-    setWorkFreeModal(state, { modal }) {
+    setFreeModal(state, { modal }) {
       state.workfreeModal = modal;
     }
   },
   actions: {
+    setWorkFreeModal({ commit }, { modal }) {
+      commit("setFreeModal", {
+        modal
+      });
+    },
     setClassModal({ commit }, { modal }) {
       commit("setClassModal", {
         modal
       });
     },
 
-    setWorkFreeModal({ commit }, { modal }) {
-      commit("setWorkFreeModal", {
+    setFreeModal({ commit }, { modal }) {
+      commit("setFreeModal", {
         modal
       });
     },
@@ -146,6 +189,27 @@ export const taskManagement = {
         );
     },
     getEvents({ dispatch }, { uid }) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       Promise.all([
         dispatch("getFreeHours", {
           uid
@@ -158,28 +222,81 @@ export const taskManagement = {
         })
       ]).then(() => {});
     },
-    getTaskByEarliestDueDate({ commit, state }, { uid }) {
+    getTaskByEarliestDueDate({ commit, state }, uid) {
+      let taskList = [];
       db()
         .ref(`${uid}/tasks`)
+        .orderByChild("dueDate")
+        .limitToLast(100)
         .once("value", snapshot => {
-          const ls = snapshot
-            .filter(each => {
-              each.done === false;
-              return this.sortedArray(ls);
-            })
-            .then(items =>
-              commit("setTasksByDueDate", {
-                tasksByDueDate: [...state.tasksByDueDate, ...items]
-              })
-            );
+          console.log("snapshot: ", snapshot);
+          snapshot.forEach(childSnapshot => {
+            console.log("child: ", childSnapshot);
+            console.log(childSnapshot.val());
+            let task = {
+              task: childSnapshot.val(),
+              id: childSnapshot.key
+            };
+            taskList = taskList.concat([task.task]);
+          });
+          console.log("taskList", taskList);
+          commit("setTasks", taskList);
+        })
+        .then(() => {
+          console.log("GetTasks Complete");
+        })
+        .catch(e => {
+          console.log("Get Tasks error: ", e.message);
         });
+      // .once("value", snapshot => {
+      //   const ls = snapshot
+      //     .filter(each => {
+      //       each.done === false;
+      //       return this.sortedArray(ls);
+      //     })
+      //     .then(items =>
+      //       commit("setTasksByDueDate", {
+      //         tasksByDueDate: [...state.tasksByDueDate, ...items]
+      //       })
+      //     );
+      // });
     },
-    setTask({ commit, dispatch }, {uid, payload}) {
+    setTask({ commit, dispatch }, { uid, payload }) {
       console.log("setTask", uid);
       console.log("task", payload);
-      db().ref(`${uid}/tasks`).push(payload).then( () => {
-        console.log("stored");
-      }).catch( (e) => {console.log(e.message);});
+      db()
+        .ref(`${uid}/tasks`)
+        .push(payload)
+        .then(() => {
+          console.log("stored");
+        })
+        .catch(e => {
+          console.log(e.message);
+        });
+    },
+    setFreeTime({ commit }, { days, startTime, endTime, uid }) {
+      // db().ref(`${uid}/meta/week`)
+
+      const persistData = days.reduce((accu, current) => {
+        accu[current] = {
+          freeHours: {
+            startTime,
+            endTime
+          }
+        };
+        return accu;
+      }, {});
+
+      console.log(uid);
+      console.log(persistData);
+
+      Object.keys(persistData).forEach(day => {
+        db()
+          .ref(`${uid}/meta/week/${day}/freeHours`)
+          .push(persistData[day].freeHours);
+      });
+
+      // Check and append to db
     },
     setClass({ commit, dispatch }, {uid, payload}) {
       console.log("setClass", uid);

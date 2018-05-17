@@ -41,8 +41,13 @@
     <!-- <v-btn @click.native.stop="dialogClass=!dialogClass" icon>
       <v-icon>{{ "add" }}</v-icon>
     </v-btn> -->
+    
     <v-dialog v-model="addClassDialog" max-width="500px">
       <AddClassModal @close="$store.dispatch('setClassModal', {'modal': false})" />
+    </v-dialog>
+
+    <v-dialog v-model="workFreeModal" max-width="500px">
+      <AddFreeTime @close="$store.dispatch('setWorkFreeModal', {'modal': false})" />
     </v-dialog>
   </v-app>
 </template>
@@ -52,6 +57,7 @@ import Calendar from "@/components/Calendar.vue";
 import List from "@/components/List.vue";
 import AddTaskModal from "@/components/AddTaskModal";
 import AddClassModal from "@/components/AddClassModal";
+import AddFreeTime from "@/components/AddFreeTime";
 import { mapGetters } from "vuex";
 
 export default {
@@ -60,7 +66,8 @@ export default {
     Calendar,
     List,
     AddTaskModal,
-    AddClassModal
+    AddClassModal,
+    AddFreeTime
   },
   data: () => ({
     dialog: false,
@@ -77,7 +84,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      addClassDialog: "getClassDialog"
+      addClassDialog: "getClassDialog",
+      workFreeModal: "getWorkFreeModal"
     })
   }
 };
