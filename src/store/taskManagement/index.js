@@ -23,7 +23,7 @@ export const taskManagement = {
   },
   getters: {
     getClassDialog: state => state.classModal,
-    getWFModal: state => state.workfreeModal
+    getWorkFreeModal: state => state.workfreeModal
   },
   computed: {
     sortedArray: function() {
@@ -59,6 +59,11 @@ export const taskManagement = {
     }
   },
   actions: {
+    setWorkFreeModal({ commit }, { modal }) {
+      commit("setFreeModal", {
+        modal
+      });
+    },
     setClassModal({ commit }, { modal }) {
       commit("setClassModal", {
         modal
@@ -207,6 +212,30 @@ export const taskManagement = {
         .catch(e => {
           console.log(e.message);
         });
+    },
+    setFreeTime({ commit }, { days, startTime, endTime, uid }) {
+      // db().ref(`${uid}/meta/week`)
+
+      const persistData = days.reduce((accu, current) => {
+        accu[current] = {
+          freeHours: {
+            startTime,
+            endTime
+          }
+        };
+        return accu;
+      }, {});
+
+      console.log(uid);
+      console.log(persistData);
+
+      Object.keys(persistData).forEach(day => {
+        db()
+          .ref(`${uid}/meta/week/${day}/freeHours`)
+          .push(persistData[day].freeHours);
+      });
+
+      // Check and append to db
     }
   }
 };

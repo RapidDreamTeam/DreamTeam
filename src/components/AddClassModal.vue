@@ -35,33 +35,33 @@
 
 <script>
 export default {
-  components: {  },
+  components: {},
   props: {
-    dialogVisible: Boolean,
+    dialogVisible: Boolean
   },
   computed: {
     dialog: {
-      get () {
+      get() {
         if (this.dialogVisible) {
           console.log("visible");
         }
         return this.dialogVisible;
       },
-      set (value) {
+      set(value) {
         if (!value) {
-          this.$emit('close');
+          this.$emit("close");
         }
       }
     }
   },
-  data () {
+  data() {
     return {
       name: "",
       rm: "",
       startTime: "",
       endTime: "",
       alertBefore: 0
-    }
+    };
   },
   methods: {}
 };
