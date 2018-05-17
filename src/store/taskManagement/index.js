@@ -13,7 +13,7 @@ import moment from "moment";
 export const taskManagement = {
   state: {
     freeHours: [],
-    workHours: [],
+    workHours: {},
     lectureHours: [],
     events: [],
     tasks: [],
@@ -23,6 +23,7 @@ export const taskManagement = {
     workModal: false
   },
   getters: {
+    getWorkHours: state => state.workHours,
     getClassDialog: state => state.classModal,
     getFreeModal: state => state.freeModal,
     getWorkModal: state => state.workModal,
@@ -143,23 +144,77 @@ export const taskManagement = {
       // TODO: merge prev state with new state and separate into days
     },
     getWorkHours({ commit }, { uid }) {
+      console.log("UIDDD", uid);
+      // db()
+      //   .ref(`${uid}/meta`)
+      //   .once("value", ({ val, key }) => ({
+      //     meta: val(),
+      //     id: key
+      //   }))
+      // .then(({ meta }) => {
+      //   console.log("reducing");
+      //   return days.reduce((accu, currentValue) => {
+      //     accu[currentValue] = meta.week[currentValue].workHours;
+      //     return accu;
+      //   }, {});
+      // })
+      // .then(val => {
+      //   console.log("getWorkHours", val);
+      //   return val;
+      // })
+      // .then(val =>
+      //   commit("setWorkHours", {
+      //     workHours: val
+      //   })
+      // );
+
       db()
         .ref(`${uid}/meta`)
-        .once("value", ({ val, key }) => ({
-          meta: val(),
-          id: key
+        .once("value", snapshot => ({
+          meta: snapshot,
+          id: snapshot.id
         }))
-        .then(({ meta }) => {
-          return days.reduce((accu, currentValue) => {
-            accu[currentValue] = meta.week[currentValue].workHours;
-            return accu;
-          }, {});
+        .then(v => {
+          const temp = {};
+          Object.keys(v.val().week).map(d => {
+            if (v.val().week[d].workHours) {
+              Object.keys(v.val().week[d].workHours).map(k2 => {
+                if (!temp[d]) {
+                  temp[d] = [];
+                }
+                temp[d].push({
+                  key: k2,
+                  ...v.val().week[d].workHours[k2]
+                });
+              });
+            }
+          });
+
+          return temp;
         })
-        .then(val =>
+        .then(a => {
+          console.log(a);
+          return a;
+        })
+        .then(a =>
           commit("setWorkHours", {
-            workHours: val
+            workHours: a
           })
         );
+      // .then(snapshot => {
+      //   return {
+      //     meta: days.reduce((accu, current) => {
+      //       accu[current] = snapshot.meta["week"][current].workHours;
+      //       return accu;
+      //     }),
+      //     id: snapshot.id
+      //   };
+      // })
+      // .then(v => {
+      //   commit("setWorkHours", {
+      //     workHours: v
+      //   });
+      // });
     },
     getLectureHours({ commit }, { uid }) {
       db()
@@ -291,7 +346,8 @@ export const taskManagement = {
         accu[current] = {
           workHours: {
             startTime,
-            endTime
+            endTime,
+            occupied: false
           }
         };
         return accu;

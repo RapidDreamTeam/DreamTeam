@@ -78,74 +78,68 @@
 </template>
 
 <script>
-  import moment from 'moment';
-  export default {
-    props: ['visible', 'auto'],
-    computed: {
-      dialog: {
-        get () {
-          return this.visible
-        },
-        set (value) {
-          if (!value) {
-            this.clearForm();
-            this.$emit('close', null)
-          }
+import moment from "moment";
+export default {
+  props: ["visible", "auto"],
+  computed: {
+    dialog: {
+      get() {
+        return this.visible;
+      },
+      set(value) {
+        if (!value) {
+          this.clearForm();
+          this.$emit("close", null);
         }
       }
-    },
-    data () {
-      return {
-        valid: false,
-        subTaskName: "",
-        nameRules: [
-          v => !!v || 'Name is required',
-        ],
-        estimatedTime: 1,
-        doTime: null,
-        doDate: null,
-        timeMenu: false,
-        dateMenu: false,
-      }
-    },
-    methods: {
-      clearForm() {
-        this.valid = false;
-        this.subTaskName = "";
-        this.estimatedTime = 1;
-        this.doTime = null;
-        this.doDate = null;
-        this.timeMenu = false;
-        this.dateMenu = false;
-      },
-      closeSubTask() {
-        console.log("cancel");
-        this.$emit('close', null);
-      },
-      submitSubTask() {
-        const days = [
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday",
-          "saturday",
-          "sunday"
-        ];
-        const payload = {
-          "name": this.subTaskName,
-          "estimatedTime": this.estimatedTime,
-          "startTime": !this.auto ? this.doTime : "",
-          "date": !this.auto ? this.doDate : "",
-          "day": !this.auto ? days[moment(this.doDate, "YYYY-M-D").day()] : "",
-          "done": false,
-          "isScheduled": false,
-          "time": "23:59",
-          "endTime": !this.auto ? moment(this.doTime, "YYYY-M-D").add(this.estimatedTime, 'hours').format("YYYY-M-D") : ""
-        };
-        this.clearForm();
-        this.$emit('close', payload);
-      }
     }
-  };
+  },
+  data() {
+    return {
+      valid: false,
+      subTaskName: "",
+      nameRules: [v => !!v || "Name is required"],
+      estimatedTime: 1,
+      doTime: null,
+      doDate: null,
+      timeMenu: false,
+      dateMenu: false
+    };
+  },
+  methods: {
+    clearForm() {
+      this.valid = false;
+      this.subTaskName = "";
+      this.estimatedTime = 1;
+      this.doTime = null;
+      this.doDate = null;
+      this.timeMenu = false;
+      this.dateMenu = false;
+    },
+    closeSubTask() {
+      console.log("cancel");
+      this.$emit("close", null);
+    },
+    submitSubTask() {
+      const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+      const payload = {
+        name: this.subTaskName,
+        estimatedTime: this.estimatedTime,
+        startTime: !this.auto ? this.doTime : "",
+        date: !this.auto ? this.doDate : "",
+        day: !this.auto ? days[moment(this.doDate, "YYYY-M-D").day()] : "",
+        done: false,
+        isScheduled: true,
+        time: "23:59",
+        endTime: !this.auto
+          ? moment(this.doTime, "YYYY-M-D")
+              .add(this.estimatedTime, "hours")
+              .format("YYYY-M-D")
+          : ""
+      };
+      this.clearForm();
+      this.$emit("close", payload);
+    }
+  }
+};
 </script>

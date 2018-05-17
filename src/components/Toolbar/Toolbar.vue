@@ -107,6 +107,17 @@
             </v-list-tile-content>
           </v-list-tile>
 
+          <v-list-tile @click.stop="$store.dispatch('getWorkHours', {'uid': uid() })">
+            <v-list-tile-action>
+              <v-icon>calendar_today</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Compute
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
           <!-- <v-list-tile @click="$router.push(item.link)">
             <v-list-tile-action>
               <v-icon>calendar_today</v-icon>
@@ -126,6 +137,7 @@
 <script>
 import ToolbarButton from "./ToolbarButton.vue";
 import AddTaskModal from "../AddTaskModal.vue";
+import { auth } from "@/firebase.js";
 // import AddSubTaskDialog from "../AddSubTaskModal.vue"
 export default {
   data() {
@@ -144,6 +156,9 @@ export default {
   methods: {
     signout() {
       this.$store.dispatch("signout");
+    },
+    uid() {
+      return auth().currentUser.uid.toString();
     }
   },
 

@@ -72,51 +72,41 @@
 </template>
 
 <script>
-import moment from 'moment';
+import moment from "moment";
 import AddSubTaskModal from "./AddSubTaskModal";
-import { auth } from '@/firebase.js';
+import { auth, db } from "@/firebase.js";
 export default {
   components: { AddSubTaskModal },
   props: {
-    dialogVisible: Boolean,
+    dialogVisible: Boolean
   },
   computed: {
     dialog: {
-      get () {
+      get() {
         if (this.dialogVisible) {
           console.log("visible");
         }
         return this.dialogVisible;
       },
-      set (value) {
+      set(value) {
         if (!value) {
-          this.$emit('close');
+          this.$emit("close");
         }
       }
     }
   },
-  data () {
+  data() {
     return {
       name: "",
-      nameRules: [
-        v => !!v || 'Name is required',
-      ],
+      nameRules: [v => !!v || "Name is required"],
       estimatedTime: 0,
       subTaskDialog: false,
       checkbox: false,
       dueDate: null,
       dateMenu: true,
       subTasks: [],
-      days  :[
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday"
-      ]
-    }
+      days: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    };
   },
   methods: {
     clearForm() {
@@ -127,66 +117,96 @@ export default {
       this.dateMenu = false;
       this.subTasks = [];
     },
-    closeSubTaskDialog (a) {
+    closeSubTaskDialog(a) {
       this.subTaskDialog = false;
       if (a !== null) {
         this.subTasks = this.subTasks.concat([a]);
         console.log(a);
-        console.log(this.subTasks)
+        console.log(this.subTasks);
       }
     },
     submitTask() {
       console.log("submit");
       const payload = {
-        "auto": this.checkbox,
-        "name": this.name,
-        "estimatedTime": this.estimatedTime,
-        "dueDate": moment(this.dueDate, "YYYY-M-D").unix(),
-        "done": false,
-        "subtask": this.subTasks
+        auto: this.checkbox,
+        name: this.name,
+        estimatedTime: this.estimatedTime,
+        dueDate: moment(this.dueDate, "YYYY-M-D").unix(),
+        done: false,
+        subtask: this.subTasks
       };
       this.clearForm();
       // console.log("uiddddd",uid);
-      const task = {'uid': auth().currentUser.uid,'payload': payload};
+      const task = { uid: auth().currentUser.uid, payload: payload };
       console.log(task);
-      this.scheduleTask(payload, uid)
-      this.$store.dispatch('setTask', task)
+      this.$store.dispatch("setTask", task);
+      this.scheduleTask(payload, auth().currentUser.uid);
     },
-    scheduleTask( payload , uid ) {
+    scheduleTask(payload, uid) {
+      // if payload.auto === true
       console.log("scheduling");
-      this.$store.dispatch('getWorkHours', {uid})
-      const workHours = this.$store.getters.getWork
+      this.$store.dispatch("getWorkHours", { uid }).then(() => {
+        const workObj = this.$store.getters.getWork;
 
-      const currentDay = moment().format("dddd")
-      const dueDay = moment(payload.dueDate).format("dddd").toLowerCase()
+        // const currentDay = moment().format("dddd");
+        // const dueDay = moment(payload.dueDate)
+        //   .format("dddd")
+        //   .toLowerCase();
 
-      const currentDayIndex = days.indexOf(currentDay)
-      const dueDayIndex = days.indexOf(dueDay)
+        // const currentDayIndex = days.indexOf(currentDay);
+        // const dueDayIndex = days.indexOf(dueDay);
 
-      if (currentDayIndex > dueDayIndex){
-        alert("Your due date has been passed.")
-        return;
-      }
+        // if (currentDayIndex > dueDayIndex) {
+        //   alert("Your due date has been passed.");
+        //   return;
+        // }
 
-      workhours.forEach( wh => {
-        const start = moment(wh.startTime).hours();
-        const end = moment(wh.endTime).hours();
-        const hours = end - start;
+        console.log("before loop");
 
+        const days = Object.keys(workObj);
 
-        // If task can fit in the slot and the slot is not occupied
-        if (payload.estimatedTime <= hours && wh.occupied == false){
-          // Occupy the slot and update the subtask to scheduled
-        } else if (payload.estimatedTime > hours && wh.occupied == false){
-          // Divide the task and occupy that many slots and update the subtask to scheduled
-        } else {
-          // Fuck
+        for (let i = 0; i < days.length; i++) {
+          // console.log("in 1st loop");
+          // this is a String
+          const day = days[i];
+
+          // this is a list
+          const eachDay = workObj[day];
+
+          for (let j = 0; j < eachDay.length; j++) {
+            // console.log("in 2nd  loop");
+            const eachSlot = eachDay[j];
+
+            const start = moment(eachSlot.startTime, "hh:mm").hours();
+            const end = moment(eachSlot.endTime, "hh:mm").hours();
+            const hours = end - start;
+
+            console.log("peter is a cunt", start, eachSlot.startTime);
+            console.log("sjhu", end, eachSlot.endTime);
+
+            for (let k = 0; k < payload.subtask.length; k++) {
+              // console.log("in 3rd loop loop");
+              // If task can fit in the slot and the slot is not occupied
+              console.log(hours, eachSlot.occupied);
+              const kk = eachSlot.key;
+              console.log("uri", `${uid}/meta/week/${day}/workHours/${kk}`);
+              console.log("misc", payload.subtask, k, hours, eachSlot.occupied);
+              if (payload.subtask[k].estimatedTime <= hours && eachSlot.occupied === false) {
+                // Occupy the slot and update the subtask to scheduled
+                console.log("inside update");
+                db()
+                  .ref(`${uid}/meta/week/${day}/workHours/${kk}`)
+                  .update({ occupied: true });
+              } else if (payload.subtask[k].estimatedTime > hours && eachSlot.occupied === false) {
+                // Divide the task and occupy that many slots and update the subtask to scheduled
+              } else {
+                // Fuck
+              }
+            }
+          }
         }
-
-
-      })
-
-
+      });
+      // {[]}
     }
   }
 };
