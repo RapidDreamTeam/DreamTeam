@@ -65,6 +65,15 @@ export const authentication = {
         )
         .then(() => router.push("/signin"));
     },
+    signoutWithoutRedirect({ commit }) {
+      return auth()
+        .signOut()
+        .then(() =>
+          commit("setCurrentUser", {
+            currentUser: null
+          })
+        );
+    },
     currentUser({ commit }, firebaseUser) {
       commit("setCurrentUser", {
         currentUser: firebaseUser
