@@ -11,11 +11,11 @@
     </v-toolbar>
     <v-content>
       <section>
-        <v-parallax src="/assets/img/hero.jpeg" height="600">
-          <v-layout column align-center justify-center class="white--text">
+        <v-parallax src="/assets/img/agenda-appointment-business-1020323.jpg" height="600">
+          <v-layout column align-center justify-center>
             <img src="/assets/img/vuetify.png" alt="Vuetify.js" height="200">
-            <h1 class="white--text mb-2 display-1 text-xs-center">Advanced Scheduler</h1>
-            <div class="subheading mb-3 text-xs-center">Hackathon 2</div>
+            <h1 class="headline mb-2 display-1 text-xs-center" style="color: black;">Advanced Scheduler</h1>
+            <div class="subheading mb-3 text-xs-center" style="color: black;">Hackathon 2</div>
             <v-btn class="blue darken-3" dark large href="/register">
               Sign up
             </v-btn>
@@ -45,7 +45,7 @@
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-xs-center">Elegent Design</div>
                     </v-card-title>
-                    <v-card-text>
+                    <v-card-text style="color: black;">
                       Our application is designed to best suit the needs of
                       a university student. Usually students have the same classes
                       every week, so we opted for a weekly and daily calender.
@@ -59,7 +59,7 @@
                       <v-icon x-large class="blue--text text--lighten-2">flash_on</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
-                      <div class="headline">Fast Scheduling</div>
+                      <div class="headline" >Fast Scheduling</div>
                     </v-card-title>
                     <v-card-text>
                       All you would have to do is click the add icon on your
@@ -76,7 +76,7 @@
       </section>
 
       <section>
-        <v-parallax src="/assets/img/section.jpg" height="380">
+        <v-parallax src="/assets/img/adults-agenda-cafe-1056551.jpg" height="380">
           <v-layout column align-center justify-center>
             <div class="headline white--text mb-3 text-xs-center">Scheduling has never been easier</div>
             <em>Kick-start your week today!</em>
@@ -101,7 +101,7 @@
                   <div class="headline">Dream Team</div>
                 </v-card-title>
                 <v-card-text>
-                  Insert Text
+                
                 </v-card-text>
               </v-card>
             </v-flex>

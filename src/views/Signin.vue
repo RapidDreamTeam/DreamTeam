@@ -1,5 +1,6 @@
 <template>
   <v-app id="inspire">
+    <!-- <vue-video-background videoSrcWebm="/assets/video/WEBM/Office-Day.webm" videoSrcMp4=/assets/video/MP4/Office-Day.webm></vue-video-background> -->
     <v-content>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
@@ -44,8 +45,9 @@
 <script>
 import FacebookIcon from "vue-material-design-icons/facebook.vue";
 import GoogleIcon from "vue-material-design-icons/google.vue";
+import VueVideoBackground from "vue-video-background";
 export default {
-  components: { FacebookIcon, GoogleIcon },
+  components: { FacebookIcon, GoogleIcon, VueVideoBackground },
   data: () => ({
     email: "",
     password: ""
