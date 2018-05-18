@@ -43,7 +43,7 @@ export default {
     dialog: {
       get() {
         if (this.dialogVisible) {
-          console.log("visible");
+          // console.log("visible");
         }
         return this.dialogVisible;
       },

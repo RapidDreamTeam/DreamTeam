@@ -25,30 +25,33 @@
 </template>
 
 <script>
-  import {auth} from '@/firebase.js';
-  export default {
-    data() {
-      return {
-        // items: [
-        //   { header: "Today" },
-        //   { avatar: "/assets/img/hackathon.jpg", title: "TOC Task 2" },
-        //   { divider: true, inset: true },
-        //   { avatar: "/assets/img/hackathon.jpg", title: 'Hackathon-2 <span class="grey--text text--lighten-1">4</span>' },
-        //   { divider: true, inset: true },
-        //   {
-        //     avatar: "/assets/img/hackathon.jpg",
-        //     title: "God of War",
-        //     subtitle: "<span class='text--primary'>Playstation Overload</span> &mdash; You need to finish this, Boy."
-        //   }
-        // ],
-      };
-    }, methods: {
-    }, computed: {
-      items() { return this.$store.getters.getTasksAsList }
-    }, beforeMount: function() {
-      console.log("mount");
-      this.$store.dispatch("getTaskByEarliestDueDate", auth().currentUser.uid);
-
+import { auth } from "@/firebase.js";
+export default {
+  data() {
+    return {
+      // items: [
+      //   { header: "Today" },
+      //   { avatar: "/assets/img/hackathon.jpg", title: "TOC Task 2" },
+      //   { divider: true, inset: true },
+      //   { avatar: "/assets/img/hackathon.jpg", title: 'Hackathon-2 <span class="grey--text text--lighten-1">4</span>' },
+      //   { divider: true, inset: true },
+      //   {
+      //     avatar: "/assets/img/hackathon.jpg",
+      //     title: "God of War",
+      //     subtitle: "<span class='text--primary'>Playstation Overload</span> &mdash; You need to finish this, Boy."
+      //   }
+      // ],
+    };
+  },
+  methods: {},
+  computed: {
+    items() {
+      return this.$store.getters.getTasksAsList;
     }
-  };
+  },
+  beforeMount: function() {
+    // console.log("mount");
+    this.$store.dispatch("getTaskByEarliestDueDate", auth().currentUser.uid);
+  }
+};
 </script>

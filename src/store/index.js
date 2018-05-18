@@ -103,15 +103,15 @@ const days = [
 export default new Vuex.Store({
   modules: {
     auth: authentication,
-    task: taskManagement,
+    task: taskManagement
   },
   state: {
-    loading: false,
+    loading: false
   },
   mutations: {
     setLoading(state, { loading }) {
       state.loading = loading;
-    },
+    }
   },
   actions: {},
   getters: {}

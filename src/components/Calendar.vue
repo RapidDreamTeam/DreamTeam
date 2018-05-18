@@ -4,7 +4,7 @@
 
 <script>
 import FullCalender from "vue-full-calendar";
-import {auth} from '@/firebase.js';
+import { auth } from "@/firebase.js";
 
 export default {
   components: {
@@ -28,22 +28,25 @@ export default {
       //       allDay : false,
       //   },
       // ]
-    }
+    };
   },
   computed: {
-    events() { return this.$store.getters.getTasksAsCalendar },
-    hours() { return this.$store.getters.getHoursAsCalendar },
+    events() {
+      return this.$store.getters.getTasksAsCalendar;
+    },
+    hours() {
+      return this.$store.getters.getHoursAsCalendar;
+    }
   },
   methods: {},
   beforeMount: function() {
     console.log("mount", auth().currentUser.uid);
     this.$store.dispatch("getFreeHours", auth().currentUser.uid);
     this.$store.dispatch("getLectureHours", auth().currentUser.uid);
-
   }
 };
 </script>
 
 <style>
-    @import '~fullcalendar/dist/fullcalendar.css';
+@import "~fullcalendar/dist/fullcalendar.css";
 </style>

@@ -108,6 +108,6 @@ export const authentication = {
   },
   getters: {
     getCurrentUser: state => state.currentUser,
-    getUid: state => auth.currentUser.uid,
+    getUid: state => auth.currentUser.uid
   }
 };
