@@ -1,9 +1,11 @@
 <template>
-	<full-calendar :config="config" :events="events"/>
+	<full-calendar :config="config" :events="events.concat(hours)"/>
 </template>
 
 <script>
 import FullCalender from "vue-full-calendar";
+import {auth} from '@/firebase.js';
+
 export default {
   components: {
     FullCalender
@@ -29,9 +31,16 @@ export default {
     }
   },
   computed: {
-    events() { return this.$store.getters.getTasksAsCalendar }
+    events() { return this.$store.getters.getTasksAsCalendar },
+    hours() { return this.$store.getters.getHoursAsCalendar },
   },
-  methods: {}
+  methods: {},
+  beforeMount: function() {
+    console.log("mount", auth().currentUser.uid);
+    this.$store.dispatch("getFreeHours", auth().currentUser.uid);
+    this.$store.dispatch("getLectureHours", auth().currentUser.uid);
+
+  }
 };
 </script>
 

@@ -48,24 +48,17 @@ export const taskManagement = {
     getFreeModal: state => state.freeModal,
     getWorkModal: state => state.workModal,
     getWork: state => state.workHours,
+    getFreeHours: state => state.freeHours,
+    getLectureHours: state => state.lectureHours,
     getTasks: state => state.tasks,
     getTasksAsList: (state, getters) => {
-      console.log(getters);
-      console.log(getters.getTasks);
       const tasks = getters.getTasks;
-      console.log(tasks);
-      console.log("GetTasksAsList");
       let list = [
         {
           header: "Today"
         }
       ];
       tasks.forEach(task => {
-        console.log("loop tasks: ", task);
-        console.log(
-          moment.unix(task.dueDate).format("YYYY-M-D"),
-          moment().format("YYYY-M-D")
-        );
         if (
           moment.unix(task.dueDate).format("YYYY-M-D") ===
           moment().format("YYYY-M-D")
@@ -86,7 +79,6 @@ export const taskManagement = {
       return list;
     },
     getTasksAsCalendar: (state, getters) => {
-      console.log("getTasksAsCalendar");
       const tasks = getters.getTasks;
       let list = [];
 
@@ -97,7 +89,8 @@ export const taskManagement = {
         tasks.subtask.forEach( subTask => {
           if (subTask.isScheduled) {
             const time = moment(subTask.startTime, "HH:mm");
-            const startTaskTime = start.add(day_offset[subTask.day], "days").second(0).minute(time.minute()).hour(time.hour());
+            const startTaskTime = start.add(day_offset[subTask.day], "days")
+              .second(0).minute(time.minute()).hour(time.hour());
             const taskPayload = {
               title: subTask.name,
               start: startTaskTime.format(),
@@ -108,6 +101,43 @@ export const taskManagement = {
         })
       });
       console.log("LIST", list);
+      return list;
+    },
+    getHoursAsCalendar: (state, getters) => {
+      const freeHours = getters.getFreeHours;
+      const lectureHours = getters.getLectureHours;
+
+      let list = [];
+
+      freeHours.forEach( f => {
+        const startDay = moment().subtract(day_offset[f.day], "days");
+
+        const key = Object.keys(f.hours.freeHours)[0];
+        const hours = f.hours.freeHours[key];
+
+        const startTime = moment(hours.startTime, "hh:mm");
+        const endTime = moment(hours.endTime, "hh:mm");
+
+        list = list.concat([{
+          title: "Free Time",
+          start: startDay.minute(startTime.minute()).hour(startTime.hour()).format(),
+          end: startDay.minute(endTime.minute()).hour(endTime.hour()).format()
+        }]);
+      });
+      lectureHours.forEach( f => {
+        console.log(moment().format("dddd").toLowerCase());
+        const startDay = moment().subtract(day_offset[moment().format("dddd").toLowerCase()], "days");
+        const startTime = moment(f.startTime, "hh:mm");
+        const endTime = moment(f.endTime, "hh:mm");
+        f.day.forEach( day => {
+          const d = moment(startDay).add(day_offset[day], "days");
+          list = list.concat([{
+            title: f.name + ": " + f.room,
+            start: d.minute(startTime.minute()).hour(startTime.hour()).format(),
+            end: d.minute(endTime.minute()).hour(endTime.hour()).format(),
+          }]);
+        })
+      });
       return list;
     }
   },
@@ -122,13 +152,13 @@ export const taskManagement = {
     }
   },
   mutations: {
-    setFreeHours(state, { freeHours }) {
+    setFreeHours(state, freeHours) {
       state.freeHours = freeHours;
     },
     setWorkHours(state, { workHours }) {
       state.workHours = workHours;
     },
-    setLectureHours(state, { lectureHours }) {
+    setLectureHours(state, lectureHours) {
       state.lectureHours = lectureHours;
     },
     setTasks(state, tasks) {
@@ -166,27 +196,18 @@ export const taskManagement = {
         modal
       });
     },
-    getFreeHours({ commit }, { uid }) {
+    getFreeHours({ commit }, uid) {
+      console.log("uid", uid);
       db()
-        .ref(`${uid}/meta`)
-        .once("value", ({ val, key }) => ({
-          meta: val(),
-          id: key
-        }))
-        .then(({ meta }) => {
-          // const f = days.map(d => meta.week[d].freeHours); // Filter out and left with free hours within week
-          return days.reduce((accu, currentValue) => {
-            accu[currentValue] = meta.week[currentValue].freeHours;
-            return accu;
-          }, {});
+        .ref(`${uid}/meta/week`)
+        .once("value", snapshot => {
+          let list = [];
+          snapshot.forEach(child => {
+            // console.log("week child:", child.key, child.val());
+            list = list.concat([{day: child.key, hours: child.val()}])
+          });
+          commit("setFreeHours", list);
         })
-        .then(ret =>
-          commit("setFreeHours", {
-            freeHours: ret
-          })
-        );
-
-      // TODO: merge prev state with new state and separate into days
     },
     getWorkHours({ commit }, { uid }) {
       console.log("UIDDD", uid);
@@ -261,24 +282,17 @@ export const taskManagement = {
       //   });
       // });
     },
-    getLectureHours({ commit }, { uid }) {
+    getLectureHours({ commit }, uid) {
       db()
-        .ref(`${uid}/classes`)
-        .once("value", ({ val, key }) => ({
-          meta: val(),
-          id: key
-        }))
-        .then(({ meta }) => {
-          return days.reduce((accu, current) => {
-            accu[current] = meta.week[current].lectureHours;
-            return accu;
+        .ref(`${uid}/class`)
+        .once("value", snapshot => {
+          let list = [];
+          snapshot.forEach( child => {
+            list = list.concat([child.val()]);
           });
+          commit("setLectureHours", list);
+
         })
-        .then(val =>
-          commit("setLectureHours", {
-            lectureHours: val
-          })
-        );
     },
     getScheduledTasksforTheDay({ commit, state }, { uid, day }) {
       const { tasks } = state;
