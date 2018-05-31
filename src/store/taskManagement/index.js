@@ -111,7 +111,10 @@ export const taskManagement = {
 
       freeHours.forEach( f => {
         const startDay = moment().subtract(day_offset[f.day], "days");
+        console.log("herereae", f.hours);
 
+        console.log("herereae1", f.hours.freeHours);
+        console.log("herereae2", Object.keys(f.hours.freeHours));
         const key = Object.keys(f.hours.freeHours)[0];
         const hours = f.hours.freeHours[key];
 
@@ -203,8 +206,10 @@ export const taskManagement = {
         .once("value", snapshot => {
           let list = [];
           snapshot.forEach(child => {
-            // console.log("week child:", child.key, child.val());
-            list = list.concat([{day: child.key, hours: child.val()}])
+            console.log("week child:", child.key, child.val());
+            if ('freeHours' in child.val()) {
+              list = list.concat([{day: child.key, hours: child.val()}]);
+            }
           });
           commit("setFreeHours", list);
         })
